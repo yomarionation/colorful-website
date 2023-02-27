@@ -188,7 +188,7 @@ const tick = () => {
 // c.setAttribute('id','camerap');
 
 
-tick()
+
 
 const gridHelper = new THREE.GridHelper( 10, 10 );
 // scene.add( gridHelper );
@@ -197,3 +197,26 @@ axesHelper.setColors (  0xff0000, 0xffff00, 0x0000ff)
 // scene.add( axesHelper );
 
 
+let scroll = document.getElementById('scroll')
+
+let scrollPercent = 0;
+document.body.onscroll = () => {
+    scrollPercent =
+        ((document.documentElement.scrollTop || document.body.scrollTop) /
+            ((document.documentElement.scrollHeight ||
+                document.body.scrollHeight) -
+                document.documentElement.clientHeight)) *
+        100
+    ;
+    scroll.innerHTML="scroll progress: " + scrollPercent.toFixed(2)
+}
+
+tick()
+
+function lerp(x, y, a) {
+    return (1 - a) * x + a * y
+}
+// Used to fit the lerps to start and end at specific scrolling percentages
+function scalePercent(start, end) {
+    return (scrollPercent - start) / (end - start)
+}
