@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
@@ -23,8 +22,6 @@ for(let i =0;i<10;i++){
     roughness: 0.5,
 });}
 
-
-// let childg =[]
 const logogroup = new THREE.Group();
 
 loader.load(
@@ -77,11 +74,6 @@ loader.load(
     }
 	);
 
-// const logogroup2 = logogroup.clone();
-// logogroup2.rotation.set(Math.PI / 4, 0, Math.PI / 2);
-// console.log(logogroup)
-// scene.add(logogroup2)
-
 let sG = new THREE.SphereBufferGeometry(.2)
 let s = new THREE.Mesh(sG,material)
 s.castShadow = true
@@ -120,11 +112,27 @@ const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 }
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.x = 1
-camera.position.y = 1
-camera.position.z = 2
+window.addEventListener('resize', () =>
+{
+    // Update sizes
+    sizes.width = window.innerWidth
+    sizes.height = window.innerHeight
 
+    // Update camera
+    camera.aspect = sizes.width / sizes.height
+    camera.updateProjectionMatrix()
+
+    // Update renderer
+    renderer.setSize(sizes.width, sizes.height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+})
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+camera.position.x = 3.1
+camera.position.y = -.1
+camera.position.z = 3.3
+// 3.1,-0.1,3.3
+// -0.3,1.5,3.2
+// -2.3,0.9,1.8
 scene.add(camera)
 
 const renderer = new THREE.WebGLRenderer({
@@ -144,8 +152,11 @@ const clock = new THREE.Clock()
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
+
+    // console.log(camerapos)
+
     // Update controls
-    controls.update()
+    // controls.update()
     // camera.position.x += (mouseX - camera.position.x) * .05;
     // camera.position.y += (-mouseY - camera.position.y) * .05;
     // console.log("tick")
@@ -156,16 +167,16 @@ const tick = () => {
 
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
-
-
 }
+
+
+
+let camerapos = camera.position
 
 tick()
 
-
-
 const gridHelper = new THREE.GridHelper( 10, 10 );
-// scene.add( gridHelper );
+scene.add( gridHelper );
 const axesHelper = new THREE.AxesHelper( 5 );
 axesHelper.setColors (  0xff0000, 0xffff00, 0x0000ff)
-// scene.add( axesHelper );
+scene.add( axesHelper );
