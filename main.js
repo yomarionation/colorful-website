@@ -156,6 +156,7 @@ let cpy = document.getElementById('y')
 let cpz = document.getElementById('z')
 let camerapos = camera.position
 
+let scroll = document.getElementById('scroll')
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
@@ -197,7 +198,6 @@ axesHelper.setColors (  0xff0000, 0xffff00, 0x0000ff)
 // scene.add( axesHelper );
 
 
-let scroll = document.getElementById('scroll')
 
 let scrollPercent = 0;
 document.body.onscroll = () => {
