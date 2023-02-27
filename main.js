@@ -6,7 +6,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 const canvas = document.querySelector('canvas.webgl')
 
 const scene = new THREE.Scene()
-scene.background = new THREE.Color(0xffffff); // Set the background color to white
+// scene.background = new THREE.Color(0xffffff); // Set the background color to white
 
 const loader = new GLTFLoader();
 
@@ -126,7 +126,7 @@ window.addEventListener('resize', () =>
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
+const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 camera.position.x = 3.1
 camera.position.y = -.1
 camera.position.z = 3.3
@@ -137,17 +137,24 @@ scene.add(camera)
 
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas,
-    antialias: true
+    antialias: true,
+    alpha:true
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+// renderer.setClearColor(0x000000, 10);
 // renderer.physicallyCorrectLights = true;
 
 const controls = new OrbitControls( camera, renderer.domElement );
 
 const clock = new THREE.Clock()
+
+let cpx = document.getElementById('x')
+let cpy = document.getElementById('y')
+let cpz = document.getElementById('z')
+let camerapos = camera.position
 
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
@@ -161,22 +168,32 @@ const tick = () => {
     // camera.position.y += (-mouseY - camera.position.y) * .05;
     // console.log("tick")
     // camera.lookAt(scene.position);
-
+    // cp.innerHTML=camerapos.x.toString()
+   
+    // console.log(camerapos.x.toString())
+    
     // Render
     renderer.render(scene, camera)
 
+
+    cpx.innerHTML="x: " + camerapos.x.toString()
+    cpy.innerHTML="y: " + camerapos.y.toString()
+    cpz.innerHTML="z: " + camerapos.z.toString()
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
 }
 
 
+// const c = document.createElement("span");
+// c.setAttribute('id','camerap');
 
-let camerapos = camera.position
 
 tick()
 
 const gridHelper = new THREE.GridHelper( 10, 10 );
-scene.add( gridHelper );
+// scene.add( gridHelper );
 const axesHelper = new THREE.AxesHelper( 5 );
 axesHelper.setColors (  0xff0000, 0xffff00, 0x0000ff)
-scene.add( axesHelper );
+// scene.add( axesHelper );
+
+
