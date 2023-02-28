@@ -4,6 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import model from './public/1.glb?url'
 
+
 const canvas = document.querySelector('canvas.webgl')
 
 const scene = new THREE.Scene()
