@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-// import glbfile from './assets/1.glb'
+import model from './public/1.glb?url'
 
 const canvas = document.querySelector('canvas.webgl')
 
@@ -26,10 +26,7 @@ for(let i =0;i<10;i++){
 const logogroup = new THREE.Group();
 
 loader.load(
-	'./assets/1.glb',
-    // 'https://drive.google.com/file/d/1_68OC-4vO_Pk2Btf8lStnTDWYSStfvDC/view?usp=share_link',
-    // 'https://www.dropbox.com/s/5sj7ms4k81qmj23/1.glb?dl=0',
-    // glbfile,
+	model,
     function (gltf) {
         gltf.scene.traverse(function (child) {
             if (child.isMesh) {
