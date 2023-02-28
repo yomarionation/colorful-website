@@ -3,7 +3,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import model from './public/1.glb?url'
-
+// import "./public/draco/draco_decoder.wasm"
+// import "./public/draco/draco_wasm_wrapper.js"
 const canvas = document.querySelector('canvas.webgl')
 
 const scene = new THREE.Scene()
@@ -13,7 +14,7 @@ const loader = new GLTFLoader();
 
 // Optional: Provide a DRACOLoader instance to decode compressed mesh data
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath( './draco/' );
+dracoLoader.setDecoderPath( './public/draco/' );
 loader.setDRACOLoader( dracoLoader );
 const col = [0xD3CF2F,0xD3CD2E,0xD1B72C,0xC85F27,0xC34A27,0xC98C33,0x6D532B,0x1F3D74,0x0E2C66,0x035B3E]
 const material=[]
