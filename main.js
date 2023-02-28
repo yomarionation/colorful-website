@@ -3,8 +3,10 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import model from './public/1.glb?url'
-// import "./public/draco/draco_decoder.wasm"
-// import "./public/draco/draco_wasm_wrapper.js"
+import  "./public/draco/draco_decoder.wasm?raw"
+import  "./public/draco/draco_wasm_wrapper.js?raw"
+// import * as f from "./public/draco/draco_decoder.wasm?raw"
+// import * as a from "./public/draco/draco_wasm_wrapper.js?raw"
 
 const canvas = document.querySelector('canvas.webgl')
 
