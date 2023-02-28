@@ -5,6 +5,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import model from './public/1.glb?url'
 // import "./public/draco/draco_decoder.wasm"
 // import "./public/draco/draco_wasm_wrapper.js"
+
 const canvas = document.querySelector('canvas.webgl')
 
 const scene = new THREE.Scene()
