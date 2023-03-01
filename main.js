@@ -39,7 +39,7 @@ const scene = new THREE.Scene()
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 camera.position.set(3.1,-0.1,3.3)
-let a=[3.1,-0.1,3.3]
+let a=[2.1,-1.1,4.3]
 let b=[-0.3,1.5,3.2]
 let c=[-2.3,0.9,1.8]
 let cpx = document.getElementById('x')
@@ -71,21 +71,30 @@ loader.setDRACOLoader( dracoLoader );
 /* -------------------------------------------------------------------------- */
 
 /* ------------------------------ type material ----------------------------- */
-const col = [0xD3CF2F,0xD3CD2E,0xD1B72C,0xC85F27,0xC34A27,0xC98C33,0x6D532B,0x1F3D74,0x0E2C66,0x035B3E]
+const col = [0xf5ed4a,0xfea406,0xd9544b,0x587bd5,0x004497,0x007e4e,0x1fc42a,0x44bd54,0x83ac9e,0xcc75dd,0xd400d3,0xc700cd,0x9c01bd,0x5400ae,0x3700a8,0x3300a1,0x3400a5,0x3600ac,0x3600ac,0x3600ac]
 const material=[]
-for(let i =0;i<10;i++){
+for(let i =0;i<20;i++){
     material[i] = new THREE.MeshStandardMaterial({
     color: col[i],
     roughness: 0.5,
 });}
 
 /* ------------------------------ type position ----------------------------- */
+// let lgroup1=new THREE.Group();
+// let lgroup2=new THREE.Group();
+// let lgroup3=new THREE.Group();
+
+let count = 0; // Initialize the count variable to keep track of the index of child models
+let t = 0; // Initialize the time variable to keep track of the time elapsed in frames
+let lgroup1=[]
+let lgroup2=[]
+let lgroup3=[]
 loader.load(
 	model,
     function (gltf) {
         gltf.scene.traverse(function (child) {
             if (child.isMesh) {
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 20; i++) {
                     let scaleindex = 1 +i*0.04
                     let positionindex = 1 - i*0.2
                     child.material = material[i];
@@ -94,9 +103,13 @@ loader.load(
                     const clone = child.clone();
                     clone.scale.set(scaleindex,scaleindex,scaleindex)
                     clone.position.set(1,1,positionindex)
+                    lgroup1[i]=clone
+                    // console.log(lgroup1)
                     scene.add(clone);
+                    // console.log("1")
                 }
-                for (let i = 0; i < 10; i++) {
+
+                for (let i = 0; i < 20; i++) {
                     let scaleindex = 1 +i*0.04
                     let positionindex = 1 + i*.13
                     let positionindexZ = 1 - i*.13
@@ -107,9 +120,11 @@ loader.load(
                     clone.scale.set(scaleindex,scaleindex,scaleindex)
                     clone.position.set(1,positionindex+.5,positionindexZ)
                     clone.rotation.set(Math.PI / 4,0,0);
+                    lgroup2[i]=clone
                     scene.add(clone);
                 }
-                for (let i = 0; i < 10; i++) {
+
+                for (let i = 0; i < 20; i++) {
                     let scaleindex = 1 +i*0.04
                     let positionindex = 1 - i*.13
                     let positionindexZ = 1 - i*.13
@@ -120,14 +135,33 @@ loader.load(
                     clone.scale.set(scaleindex,scaleindex,scaleindex)
                     clone.position.set(1,positionindex-.5,positionindexZ)
                     clone.rotation.set(-Math.PI / 4,0,0);
+                    lgroup3[i]=clone
                     scene.add(clone);
                 }
+               
+
+                // Animate the child mesh
+                const animateChildMesh = function () {
+                    t++;
+                   
+                    for(let i=0;i<20;i++){
+                        const logosize = 3.05 + Math.sin((i/700 + t/3300) * 1 * 140);
+                        // console.log(logosize)
+                        lgroup1[i].scale.set(logosize/2,logosize/2,1);
+                        lgroup2[i].scale.set(logosize/2,logosize/2,1);
+                        lgroup3[i].scale.set(logosize/2,logosize/2,1);
+                    }
+                   
+                    requestAnimationFrame(animateChildMesh);
+                };
+
+                animateChildMesh();
             }
         });
     }
 	);
 
-
+    console.log(lgroup1)
 /* -------------------------------------------------------------------------- */
 /*                                 light setup                                */
 /* -------------------------------------------------------------------------- */
@@ -167,8 +201,8 @@ renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 const controls = new OrbitControls( camera, renderer.domElement );
-controls.enabled = false
-controls.enableZoom = false
+// controls.enabled = false
+// controls.enableZoom = false
 
 const clock = new THREE.Clock()
 
@@ -188,7 +222,7 @@ document.body.onscroll = () => {
     ;
     scroll.innerHTML="scroll progress: " + scrollPercent.toFixed(2)
 }
-
+camera.rotation.z=Math.PI
 // let time = 0
 /* ------------------------------- scroll down ------------------------------ */
 const animationScripts = [];
@@ -198,13 +232,14 @@ animationScripts.push({
     func: function() {
       camera.lookAt(0,0,0)
       camera.position.set(a[0],a[1],a[2])
+  
     }
   });
   animationScripts.push({
     start: 0,
     end: 110,
     func: function() {
-        camera.lookAt(0,0,0)
+        camera.lookAt(10,0,0)
     camera.position.x += ( mouseX/10000 - camera.position.x ) * .05;
     camera.position.y += ( - mouseY/10000 - camera.position.y ) * .05;
     }
@@ -299,28 +334,32 @@ const tick = () => {
 
     stats.update()
     // console.log(elapsedTime)
+//id is the index of the clone, so id for first object is 0, second is 1..so on
+//count = number of clones, in our case  count = 20
+//t = time elapsed in frames
+// 0.45+ sin( ( ( id / count ) + t ) * 1 * 140) * 0.8
 
 
-
-				camera.lookAt( 0,0,0 );
+	camera.lookAt( 0,0,0 );
 
        
-    isScrollingDown().then(function(isScrollingDown) {
-        if (isScrollingDown) {
-            ScrollDownAnimations()
-            console.log("down")
-        }  else if (isScrollingDown === false) {
-            console.log('Scrolling up by at least 50 pixels');
-            ScrollUpAnimations()
-            // ScrollDownAnimations()
-          } else {
-            console.log('Not scrolling');
-            // NoScrollAnimations()
-            ScrollDownAnimations()
-          }
-      });
+    // isScrollingDown().then(function(isScrollingDown) {
+    //     if (isScrollingDown) {
+    //         ScrollDownAnimations()
+    //         // console.log("down")
+    //     }  else if (isScrollingDown === false) {
+    //         // console.log('Scrolling up by at least 50 pixels');
+    //         ScrollUpAnimations()
+    //         // ScrollDownAnimations()
+    //       } else {
+    //         // console.log('Not scrolling');
+    //         // NoScrollAnimations()
+    //         ScrollDownAnimations()
+    //       }
+    //   });
   
     renderer.render(scene, camera)
+
 
     cpx.innerHTML="x: " + camerapos.x.toString()
     cpy.innerHTML="y: " + camerapos.y.toString()
