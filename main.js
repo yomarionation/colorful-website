@@ -26,6 +26,8 @@ import model from './public/1.glb?url'
 let p = [25, 50, 60, 85]
 let mouseX = 0,
     mouseY = 0;
+let mouseOX = 0,
+    mouseOY = 0;
 let targetX = 0;
 let targetY = 0;
 let windowHalfX = window.innerWidth / 2;
@@ -42,7 +44,7 @@ const canvas = document.querySelector('canvas.webgl')
 
 const scene = new THREE.Scene()
 
-scene.fog = new THREE.Fog(0x000000, 1, 18);
+scene.fog = new THREE.Fog(0x000000, 8, 18);
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 
@@ -70,7 +72,7 @@ window.addEventListener('resize', () => {
 
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('three/examples/jsm/libs/draco/');
+dracoLoader.setDecoderPath('./draco/');
 loader.setDRACOLoader(dracoLoader);
 
 
@@ -96,8 +98,8 @@ light2.castShadow = true; // Enable shadow casting
 // light3.castShadow = true; // Enable shadow casting
 // light1.shadow.mapSize.width = 1024;
 // light1.shadow.mapSize.height = 1024;
-light2.shadow.mapSize.width = 1024;
-light2.shadow.mapSize.height = 1024;
+light2.shadow.mapSize.width = 4096;
+light2.shadow.mapSize.height = 4096;
 // light3.shadow.mapSize.width = 1024;
 // light3.shadow.mapSize.height = 1024;
 // scene.add(light1);
@@ -215,10 +217,20 @@ loader.load(
                     scene.add(clone3);
                 }
 
-
-                // Animate the child mesh
+                let speedoffset = 0;
+                let sizeoffset = 0;
+                let sizemax = 1.5
+                    // Animate the child mesh
                 const animateChildMesh = function() {
-                    t++;
+
+                    // speedoffset = lerp(1, 0.75, mouseOX)
+                    speedoffset = map(mouseOX, 1, 0.2, .2, 1)
+                        // speedoffset = 1
+                    t += speedoffset;
+                    // sizeoffset = lerp(1, 0, mouseOY)
+                    sizeoffset = map(mouseOX, 1, 0.2, 0, 1)
+                        // sizeoffset = 1
+                        // console.log(mouseOX)
                     for (let i = 0; i < indexnumber; i++) {
                         let positionindex3 = -i * .18
                         let positionindexZ3 = 1 - i * .093
@@ -226,9 +238,10 @@ loader.load(
                             // let positionindexZ = 1 - i * .093
                         let positionindex2 = i * .18
                         let positionindexZ2 = 1 - i * .093
-                        let logosize = 3.05 + Math.sin((i / 700 + t / 3300) * 1 * 140);
+                        let logosize = 3.05 + Math.sin((i / 700 + t / 4600) * 1 * 140);
                         // console.log(logosize)
-                        logosize = map(logosize, 2, 4.02, 1, 1.5)
+                        logosize = map(logosize, 2, 4.02, 1, sizemax)
+                        sizemax = lerp(1.2, 1.6, sizeoffset)
                             // logosize = 1.5
                         lgroup1[i].scale.set(logosize, logosize, 1);
                         lgroup2[i].scale.set(logosize, logosize, 1);
@@ -238,14 +251,10 @@ loader.load(
                         y2 = map(logosize, 1, 1.5, 0, .25)
                         x3 = map(logosize, 1, 1.5, 0, 0.4)
                         y3 = map(logosize, 1, 1.5, 0, .25)
-                            // console.log(logosize, x2)
-                            // lgroup2[i].position.x += x2
-                            // lgroup3[i].position.x += y2
+
                         lgroup2[i].position.set(0, positionindex2 + x2, positionindexZ2 + y2)
-                            // lgroup2[i].position.y += x3
-                            // lgroup3[i].position.y += y3
                         lgroup3[i].position.set(0, positionindex3 - x3, positionindexZ3 + y3)
-                            // console.log(logosize)
+
                     }
 
                     requestAnimationFrame(animateChildMesh);
@@ -394,13 +403,22 @@ const clock = new THREE.Clock()
 //     }
 // });
 
-camera.position.set(2, 0, 5.2)
-camera.lookAt(-1, 0, 0);
-camera.fov = 60;
-camera.far = 500;
+// camera.position.set(2, 0, 5.2)
+// camera.lookAt(-1, 0, 0);
+// camera.fov = 60;
+// camera.far = 500;
 
-camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);
+// camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);
+camera.position.set(4.66, -0.26, 5.88)
 
+camera.lookAt(-2, 0, 0);
+// camera.fov = 60;
+// camera.far = 500;
+camera.setFocalLength(25)
+    // camera.setFocalLength(3000)
+let angles = 10
+
+camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / angles);
 /* -------------------------------------------------------------------------- */
 /*                         tick and auxiliary functions                       */
 /* -------------------------------------------------------------------------- */
@@ -410,23 +428,28 @@ const tick = () => {
     stats.update()
 
 
-    camera.position.x += (-mouseX / 8500 - camera.position.x) * .05 + 0.05;
-    camera.position.y += (mouseY / 8500 - camera.position.y) * .05;
-    // console.log(camera)
-    // isScrollingDown().then(function(isScrollingDown) {
-    //     if (isScrollingDown) {
-    //         ScrollDownAnimations()
-    //         // console.log("down")
-    //     }  else if (isScrollingDown === false) {
-    //         // console.log('Scrolling up by at least 50 pixels');
-    //         ScrollUpAnimations()
-    //         // ScrollDownAnimations()
-    //       } else {
-    //         // console.log('Not scrolling');
-    //         // NoScrollAnimations()
-    //         ScrollDownAnimations()
-    //       }
-    //   });
+    camera.position.x += (-mouseX / 8500 - camera.position.x) * .07 + 0.35;
+    camera.position.y += (mouseY / 8500 - camera.position.y) * .1;
+
+    angles = mouseX / 212
+    angles = map(angles, -10, 10, -5, 5)
+    console.log(angles)
+        // camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / (10 + angles));
+        // console.log(camera)
+        // isScrollingDown().then(function(isScrollingDown) {
+        //     if (isScrollingDown) {
+        //         ScrollDownAnimations()
+        //         // console.log("down")
+        //     }  else if (isScrollingDown === false) {
+        //         // console.log('Scrolling up by at least 50 pixels');
+        //         ScrollUpAnimations()
+        //         // ScrollDownAnimations()
+        //       } else {
+        //         // console.log('Not scrolling');
+        //         // NoScrollAnimations()
+        //         ScrollDownAnimations()
+        //       }
+        //   });
 
     renderer.render(scene, camera)
 
@@ -484,10 +507,15 @@ function onDocumentMouseMove(event) {
     // mouseX = event.clientX
     mouseY = (event.clientY - windowHalfY) * 4;
     // mouseY = event.clientY
+    mouseOX = Math.abs(mouseX / 4) / windowHalfX
+    mouseOY = Math.abs(mouseY / 4) / windowHalfY
+        // if (mouseOX < 0.35) {
+        //     mouseOX = 0
+        // }
+    mouseOX = clamp(mouseOX, 0, 1)
+    mouseOY = clamp(mouseOY, 0, 1)
 }
 
-//   var prevScrollY = window.scrollY;
-//   var prevDirection = true;
 
 function isScrollingDown() {
     // Get the current scroll position
@@ -523,13 +551,11 @@ function getValue() {
     let endTime = startTime + 1000; // 1 second later
     let a = 0; // initial value of a
 
-    // loop until 1 second has elapsed
     while (Date.now() < endTime) {
         let elapsedTime = Date.now() - startTime; // time elapsed since start
         a = elapsedTime / 1000; // calculate new value of a
     }
 
-    // wait 10 milliseconds
     setTimeout(function() {
         return a;
     }, 10);
