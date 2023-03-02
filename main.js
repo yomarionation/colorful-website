@@ -5,6 +5,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 import Stats from 'three/addons/libs/stats.module.js';
 import model from './public/1.glb?url'
+// import 
 // import draco from 'draco3d';
 // import {setLoaderOptions} from '@loaders.gl/core';
 // setLoaderOptions({
@@ -69,7 +70,7 @@ window.addEventListener('resize', () => {
 
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('./draco/');
+dracoLoader.setDecoderPath('three/examples/jsm/libs/draco/');
 loader.setDRACOLoader(dracoLoader);
 
 
