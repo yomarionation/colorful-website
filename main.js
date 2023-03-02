@@ -154,8 +154,6 @@ let t = 0; // Initialize the time variable to keep track of the time elapsed in 
 let lgroup1 = []
 let lgroup2 = []
 let lgroup3 = []
-
-
 loader.load(
     model,
     function(gltf) {
@@ -187,7 +185,11 @@ loader.load(
                     child.receiveShadow = true
                     const clone2 = child.clone();
                     clone2.scale.set(scaleindex, scaleindex, scaleindex)
+
+                    // clone2.scale.set(1.5, 1.5, 1.5)
+
                     clone2.position.set(0, positionindex - x2, positionindexZ + y2)
+                        // clone2.position.set(0, positionindex - 0.52, positionindexZ + 0.25)
                     clone2.rotation.set(Math.PI * 0.3833, 0, 0);
                     lgroup2[i] = clone2
                     scene.add(clone2);
@@ -202,7 +204,12 @@ loader.load(
                     child.receiveShadow = true
                     const clone3 = child.clone();
                     clone3.scale.set(scaleindex, scaleindex, scaleindex)
+
+                    // clone3.scale.set(1.5, 1.5, 1.5)
+
                     clone3.position.set(0, positionindex - x3, positionindexZ + y3)
+                        // clone3.position.set(0, positionindex - 1.4, positionindexZ + 0.25)
+
                     clone3.rotation.set(-Math.PI * 0.3833, 0, 0);
                     lgroup3[i] = clone3
                     scene.add(clone3);
@@ -479,6 +486,8 @@ function onDocumentMouseMove(event) {
     // mouseY = event.clientY
 }
 
+//   var prevScrollY = window.scrollY;
+//   var prevDirection = true;
 
 function isScrollingDown() {
     // Get the current scroll position
