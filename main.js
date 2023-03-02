@@ -1,8 +1,16 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
+import {
+    OrbitControls
+} from 'three/examples/jsm/controls/OrbitControls.js';
+import {
+    GLTFLoader
+} from 'three/examples/jsm/loaders/GLTFLoader.js'
+import {
+    DRACOLoader
+} from 'three/examples/jsm/loaders/DRACOLoader.js'
+import {
+    RectAreaLightHelper
+} from 'three/addons/helpers/RectAreaLightHelper.js';
 import Stats from 'three/addons/libs/stats.module.js';
 import model from './public/1.glb?url'
 // import draco from 'draco3d';
@@ -25,12 +33,14 @@ import model from './public/1.glb?url'
 let p = [25, 50, 60, 85]
 let mouseX = 0,
     mouseY = 0;
+let mouseOX = 0,
+    mouseOY = 0;
 let targetX = 0;
 let targetY = 0;
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
 const stats = Stats()
-document.body.appendChild(stats.dom)
+// document.body.appendChild(stats.dom)
 
 const sizes = {
     width: window.innerWidth,
@@ -41,7 +51,7 @@ const canvas = document.querySelector('canvas.webgl')
 
 const scene = new THREE.Scene()
 
-scene.fog = new THREE.Fog(0x000000, 1, 18);
+scene.fog = new THREE.Fog(0x000000, 11, 11.5);
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 
@@ -154,11 +164,11 @@ let lgroup1 = []
 let lgroup2 = []
 let lgroup3 = []
 let angle = radiansToPi(21)
-    // console.log(angle)
+// console.log(angle)
 loader.load(
     model,
-    function(gltf) {
-        gltf.scene.traverse(function(child) {
+    function (gltf) {
+        gltf.scene.traverse(function (child) {
             if (child.isMesh) {
                 let x2 = 0.92;
                 let y2 = 0;
@@ -172,7 +182,7 @@ loader.load(
                     child.receiveShadow = true
                     const clone1 = child.clone();
                     clone1.scale.set(scaleindex, scaleindex, scaleindex)
-                        // clone1.scale.set(1.5, 1.5, 1.5)
+                    // clone1.scale.set(1.5, 1.5, 1.5)
 
                     clone1.position.set(0, 0, positionindex)
                     lgroup1[i] = clone1
@@ -188,10 +198,10 @@ loader.load(
                     child.receiveShadow = true
                     const clone2 = child.clone();
                     clone2.scale.set(scaleindex, scaleindex, scaleindex)
-                        // clone2.scale.set(1.5, 1.5, 1.5)
+                    // clone2.scale.set(1.5, 1.5, 1.5)
 
                     clone2.position.set(0, positionindex - x2, positionindexZ + y2)
-                        // clone2.position.set(0, positionindex - 0.52, positionindexZ + 0.25)
+                    // clone2.position.set(0, positionindex - 0.52, positionindexZ + 0.25)
                     clone2.rotation.set(Math.PI * 0.3833, 0, 0);
                     lgroup2[i] = clone2
                     scene.add(clone2);
@@ -206,30 +216,34 @@ loader.load(
                     child.receiveShadow = true
                     const clone3 = child.clone();
                     clone3.scale.set(scaleindex, scaleindex, scaleindex)
-                        // clone3.scale.set(1.5, 1.5, 1.5)
+                    // clone3.scale.set(1.5, 1.5, 1.5)
 
                     clone3.position.set(0, positionindex - x3, positionindexZ + y3)
-                        // clone3.position.set(0, positionindex - 1.4, positionindexZ + 0.25)
+                    // clone3.position.set(0, positionindex - 1.4, positionindexZ + 0.25)
                     clone3.rotation.set(-Math.PI * 0.3833, 0, 0);
                     lgroup3[i] = clone3
                     scene.add(clone3);
                 }
-
-
+                let speedoffset = 0;
+                let sizeoffset = 0;
+                let sizemax = 1.5
                 // Animate the child mesh
-                const animateChildMesh = function() {
-                    t++;
+                const animateChildMesh = function () {
+
+
+                    speedoffset = lerp(1, 0.75, mouseOX)
+                    t += speedoffset;
+                    sizeoffset = lerp(1, 0, mouseOY)
+                    console.log(mouseOX)
                     for (let i = 0; i < indexnumber; i++) {
                         let positionindex3 = -i * .18
                         let positionindexZ3 = 1 - i * .093
-                            // 1 + i * .18
-                            // let positionindexZ = 1 - i * .093
                         let positionindex2 = i * .18
                         let positionindexZ2 = 1 - i * .093
                         let logosize = 3.05 + Math.sin((i / 700 + t / 3300) * 1 * 140);
-                        // console.log(logosize)
-                        logosize = map(logosize, 2, 4.02, 1, 1.5)
-                            // logosize = 1.5
+
+                        logosize = map(logosize, 2, 4.02, 1, sizemax)
+                        sizemax = lerp(1.2, 1.6, sizeoffset)
                         lgroup1[i].scale.set(logosize, logosize, 1);
                         lgroup2[i].scale.set(logosize, logosize, 1);
                         lgroup3[i].scale.set(logosize, logosize, 1);
@@ -238,14 +252,9 @@ loader.load(
                         y2 = map(logosize, 1, 1.5, 0, .25)
                         x3 = map(logosize, 1, 1.5, 0, 0.4)
                         y3 = map(logosize, 1, 1.5, 0, .25)
-                            // console.log(logosize, x2)
-                            // lgroup2[i].position.x += x2
-                            // lgroup3[i].position.x += y2
+
                         lgroup2[i].position.set(0, positionindex2 + x2, positionindexZ2 + y2)
-                            // lgroup2[i].position.y += x3
-                            // lgroup3[i].position.y += y3
                         lgroup3[i].position.set(0, positionindex3 - x3, positionindexZ3 + y3)
-                            // console.log(logosize)
                     }
 
                     requestAnimationFrame(animateChildMesh);
@@ -394,13 +403,22 @@ const clock = new THREE.Clock()
 //     }
 // });
 
-camera.position.set(2, 0, 5.2)
-camera.lookAt(-1, 0, 0);
-camera.fov = 60;
-camera.far = 500;
+// camera.position.set(2, 0, 5.2)
+// camera.lookAt(-1, 0, 0);
+// camera.fov = 60;
+// camera.far = 500;
+// camera.setFocalLength(15)
+// // camera.setFocalLength(3000)
+// camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);
 
-camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);
+camera.position.set(5.66, -0.26, 6.88)
 
+camera.lookAt(-2, 0, 0);
+    // camera.fov = 60;
+    // camera.far = 500;
+    camera.setFocalLength(25)
+    // camera.setFocalLength(3000)
+    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);
 /* -------------------------------------------------------------------------- */
 /*                         tick and auxiliary functions                       */
 /* -------------------------------------------------------------------------- */
@@ -409,8 +427,8 @@ const tick = () => {
 
     stats.update()
 
-
-    camera.position.x += (-mouseX / 8500 - camera.position.x) * .05 + 0.05;
+    
+    camera.position.x += (-mouseX / 8500 - camera.position.x) * .05 + .25;
     camera.position.y += (mouseY / 8500 - camera.position.y) * .05;
     // console.log(camera)
     // isScrollingDown().then(function(isScrollingDown) {
@@ -442,7 +460,7 @@ tick()
 
 
 function ScrollDownAnimations() {
-    animationScripts.forEach(function(a) {
+    animationScripts.forEach(function (a) {
         // time = timea
         if (scrollPercent >= a.start && scrollPercent < a.end) {
             a.func();
@@ -451,7 +469,7 @@ function ScrollDownAnimations() {
 }
 
 function ScrollUpAnimations() {
-    animationScriptsup.forEach(function(a) {
+    animationScriptsup.forEach(function (a) {
         if (scrollPercent >= a.start && scrollPercent < a.end) {
             a.func();
         }
@@ -463,7 +481,7 @@ const gridHelper = new THREE.GridHelper(10, 10);
 // scene.add( gridHelper );
 const axesHelper = new THREE.AxesHelper(5);
 axesHelper.setColors(0xff0000, 0xffff00, 0x0000ff)
-    // scene.add( axesHelper );
+// scene.add( axesHelper );
 
 function lerp(x, y, a) {
     return (1 - a) * x + a * y
@@ -481,21 +499,22 @@ function clamp(value, min, max) {
 
 function onDocumentMouseMove(event) {
     mouseX = (event.clientX - windowHalfX) * 4;
-    // mouseX = event.clientX
     mouseY = (event.clientY - windowHalfY) * 4;
-    // mouseY = event.clientY
+    mouseOX = Math.abs(mouseX / 4) / windowHalfX
+    mouseOY = Math.abs(mouseY / 4) / windowHalfY
+    if (mouseOX < 0.35) {
+        mouseOX = 0
+    }
 }
 
-//   var prevScrollY = window.scrollY;
-//   var prevDirection = true;
 
 function isScrollingDown() {
     // Get the current scroll position
     var currentScrollY = window.scrollY;
 
     // Wait for a short period of time to get the next scroll position
-    return new Promise(function(resolve, reject) {
-        setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
             // Get the next scroll position
             var nextScrollY = window.scrollY;
 
@@ -530,7 +549,7 @@ function getValue() {
     }
 
     // wait 10 milliseconds
-    setTimeout(function() {
+    setTimeout(function () {
         return a;
     }, 10);
 }
