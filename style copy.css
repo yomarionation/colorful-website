@@ -13,8 +13,9 @@ body {
     top: 0;
     left: 0;
     outline: none;
-    z-index: 0;   
+    z-index: 0;
 }
+
 main {
     width: 100vw;
     height: 200vw;
@@ -31,25 +32,30 @@ section {
     padding: 20px;
     font-size: 4vh;
 }
-.camerapos{
- z-index: 99;   
- color:white;
- /* position: absolute; */
- top: 20px;
- left: 20px;
- font-size: 24px;
 
+.camerapos {
+    z-index: 99;
+    color: white;
+    /* position: absolute; */
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
 }
 
 #container {
     position: fixed;
     background-color: black;
-  }
-  
-  #back{
+}
+
+#back {
     position: absolute;
     width: 100%;
     height: 100%;
     background-color: black;
     z-index: -1;
-  }
+}
+
+
+/* headline{
+
+  } */
