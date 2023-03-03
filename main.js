@@ -5,24 +5,23 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
 import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
 import Stats from 'three/addons/libs/stats.module.js';
 import model from './public/1.glb?url'
-// import 
-// import draco from 'draco3d';
-// import {setLoaderOptions} from '@loaders.gl/core';
-// setLoaderOptions({
-//   modules: {
-//     'draco_wasm_wrapper.js': require('@loaders.gl/draco/libs/draco_wasm_wrapper.js'),
-//     'draco_decoder.wasm': require('@loaders.gl/draco/libs/draco_decoder.wasm') // NOTE: importing `wasm` requires bundler config
-//   }
-// });
-// import * as dracoloader from 'draco3d/draco_decoder.wasm'
-// import  "./public/draco/draco_decoder.wasm?raw"
-// import  "./public/draco/draco_wasm_wrapper.js?raw"
-// import * as f from "./public/draco/draco_decoder.wasm?raw"
-// import * as a from "./public/draco/draco_wasm_wrapper.js?raw"
+
 
 /* -------------------------------------------------------------------------- */
 /*                                 Basic Setup                                */
 /* -------------------------------------------------------------------------- */
+      /* Storing user's device details in a variable*/
+      let details = navigator.userAgent;
+      
+      /* Creating a regular expression
+      containing some mobile devices keywords
+      to search it in details string*/
+      let regexp = /android|iphone|kindle|ipad/i;
+      
+      /* Using test() method to search regexp in details
+      it returns boolean value*/
+      let isMobileDevice = regexp.test(details);
+
 let p = [25, 50, 60, 85]
 let mouseX = 0,
     mouseY = 0;
@@ -80,55 +79,23 @@ loader.setDRACOLoader(dracoLoader);
 /* -------------------------------------------------------------------------- */
 /*                                 light setup                                */
 /* -------------------------------------------------------------------------- */
-// const light1 = new THREE.PointLight(0xFFF2CC, 3.6, 1); // Color, Intensity
-// const light2 = new THREE.PointLight(0xFFF2CC, .6, 10); // Color, Intensity
-// const light3 = new THREE.PointLight(0xFFF2CC, .8, 100); // Color, Intensity
-// const light1 = new THREE.DirectionalLight(0xffffff, .4); // Color, Intensity
 const light2 = new THREE.DirectionalLight(0xffffff, .95); // Color, Intensity
 const light3 = new THREE.DirectionalLight(0xffffff, .4); // Color, Intensity
-// light1.position.set(-1, 0, 3); // pointlight
+
 light2.position.set(0, 0, 2); // pointlight
 light3.position.set(-3, 0, 2); // pointlight
 const targetPosition2 = new THREE.Vector3(0.5, 0, 0);
 light2.target.position.copy(targetPosition2);
 const targetPosition3 = new THREE.Vector3(-2, 3, 0);
 light3.target.position.copy(targetPosition3);
-// light3.target.set(-2, 0, 2); // pointlight
-// light1.castShadow = true; // Enable shadow casting
 light2.castShadow = true; // Enable shadow casting
-// light3.castShadow = true; // Enable shadow casting
-// light1.shadow.mapSize.width = 1024;
-// light1.shadow.mapSize.height = 1024;
 light2.shadow.mapSize.width = 4096;
 light2.shadow.mapSize.height = 4096;
-// light3.shadow.mapSize.width = 1024;
-// light3.shadow.mapSize.height = 1024;
-// scene.add(light1);
 scene.add(light2);
 scene.add(light3);
 
 const lighth = new THREE.HemisphereLight(0x7c7c7c, 0.5);
 scene.add(lighth);
-
-// const pointLightHelper = new THREE.PointLightHelper(light1, 1);
-const pointLightHelper1 = new THREE.DirectionalLightHelper(light2, 1);
-const pointLightHelper2 = new THREE.DirectionalLightHelper(light3, 1);
-// scene.add(pointLightHelper);
-// scene.add(pointLightHelper1);
-// scene.add(pointLightHelper2);
-
-// const width = 4.8;
-// const height = 2;
-// const intensity = 1.4;
-// const rectLight = new THREE.RectAreaLight(0xFFF2CC, intensity, width, height);
-// rectLight.position.set(0, 0, 1.8);
-// rectLight.lookAt(0, .6, 0);
-// rectLight.castShadow = true;
-// rectLight.shadow.mapSize.width = 1024;
-// rectLight.shadow.mapSize.height = 1024;
-// scene.add(rectLight)
-// const rectLightHelper = new RectAreaLightHelper(rectLight);
-// rectLight.add(rectLightHelper);
 
 
 /* -------------------------------------------------------------------------- */
@@ -148,10 +115,6 @@ for (let i = 0; i < indexnumber; i++) {
 }
 
 /* ------------------------------ type position ----------------------------- */
-// let lgroup1=new THREE.Group();
-// let lgroup2=new THREE.Group();
-// let lgroup3=new THREE.Group();
-
 
 let t = 0; // Initialize the time variable to keep track of the time elapsed in frames
 let lgroup1 = []
@@ -188,11 +151,7 @@ loader.load(
                     child.receiveShadow = true
                     const clone2 = child.clone();
                     clone2.scale.set(scaleindex, scaleindex, scaleindex)
-
-                    // clone2.scale.set(1.5, 1.5, 1.5)
-
                     clone2.position.set(0, positionindex - x2, positionindexZ + y2)
-                        // clone2.position.set(0, positionindex - 0.52, positionindexZ + 0.25)
                     clone2.rotation.set(Math.PI * 0.3833, 0, 0);
                     lgroup2[i] = clone2
                     scene.add(clone2);
@@ -207,12 +166,7 @@ loader.load(
                     child.receiveShadow = true
                     const clone3 = child.clone();
                     clone3.scale.set(scaleindex, scaleindex, scaleindex)
-
-                    // clone3.scale.set(1.5, 1.5, 1.5)
-
                     clone3.position.set(0, positionindex - x3, positionindexZ + y3)
-                        // clone3.position.set(0, positionindex - 1.4, positionindexZ + 0.25)
-
                     clone3.rotation.set(-Math.PI * 0.3833, 0, 0);
                     lgroup3[i] = clone3
                     scene.add(clone3);
@@ -221,29 +175,23 @@ loader.load(
                 let speedoffset = 0;
                 let sizeoffset = 0;
                 let sizemax = 1.5
-                    // Animate the child mesh
-                const animateChildMesh = function() {
 
-                    // speedoffset = lerp(1, 0.75, mouseOX)
+                const animateChildMesh = function() {
                     speedoffset = map(mouseOX, 1, 0.2, .2, 1)
-                        // speedoffset = 1
                     t += speedoffset;
-                    // sizeoffset = lerp(1, 0, mouseOY)
                     sizeoffset = map(mouseOX, 1, 0.2, 0, 1)
-                        // sizeoffset = 1
-                        // console.log(mouseOX)
+
                     for (let i = 0; i < indexnumber; i++) {
                         let positionindex3 = -i * .18
                         let positionindexZ3 = 1 - i * .093
-                            // 1 + i * .18
-                            // let positionindexZ = 1 - i * .093
+
                         let positionindex2 = i * .18
                         let positionindexZ2 = 1 - i * .093
                         let logosize = 3.05 + Math.sin((i / 700 + t / 4600) * 1 * 140);
-                        // console.log(logosize)
+
                         logosize = map(logosize, 2, 4.02, 1, sizemax)
                         sizemax = lerp(1.2, 1.6, sizeoffset)
-                            // logosize = 1.5
+
                         lgroup1[i].scale.set(logosize, logosize, 1);
                         lgroup2[i].scale.set(logosize, logosize, 1);
                         lgroup3[i].scale.set(logosize, logosize, 1);
@@ -286,7 +234,6 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 // controls.enableZoom = false
 
 const clock = new THREE.Clock()
-
 
 /* -------------------------------------------------------------------------- */
 /*                               scroll function                              */
@@ -404,22 +351,51 @@ const clock = new THREE.Clock()
 //     }
 // });
 
-// camera.position.set(2, 0, 5.2)
-// camera.lookAt(-1, 0, 0);
-// camera.fov = 60;
-// camera.far = 500;
+if(isMobileDevice){
+    document.getElementById("cb").style.top = '2vh'
+    document.getElementById("cb").style.left = '66vw'
 
-// camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);
-camera.position.set(4.66, -0.26, 5.88)
+    document.getElementById("titles").style.top = '5vh'
+    document.getElementById("titles").style.width = '50vw'
 
-camera.lookAt(-2, 0, 0);
-// camera.fov = 60;
-// camera.far = 500;
-camera.setFocalLength(25)
-    // camera.setFocalLength(3000)
-let angles = 10
+    document.getElementById("mw").style.fontSize = '7vh'
+    document.getElementById("mw").style.lineHeight = '6vh'
+    document.getElementById("ed").style.fontSize = '2.8vh'
+    document.getElementById("ed").style.lineHeight = '3vh'
+    document.getElementById("may12").style.fontSize = '7vh'
+    document.getElementById("may12").style.lineHeight = '6.5vh' 
+    document.getElementById("th").style.fontSize = '3vh'
+    document.getElementById("th").style.top = '-3vh'
 
-camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / angles);
+    document.getElementById("b").style.zIndex = '-5'
+    document.getElementById("b1").style.zIndex = '5'
+    document.getElementById("b2").style.zIndex = '5'
+
+    camera.position.set(4.66, .26, 5.88)
+    camera.lookAt(-2, 0, 0);
+    camera.setFocalLength(35)
+    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 3.5); 
+
+}else{
+    camera.position.set(4.66, -0.26, 5.88)
+    camera.lookAt(-2, 0, 0);
+    camera.setFocalLength(25)
+    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);    
+}
+
+if (window.DeviceOrientationEvent) {
+    window.addEventListener('deviceorientation', function(event) {
+    //   var alpha = event.alpha;
+      var beta = event.beta;
+      var gamma = event.gamma;
+
+      cpx.innerHTML = "x: " + beta
+      cpy.innerHTML = "y: " + gamma
+    //   cpz.innerHTML = "z: " + camerapos.z.toString()
+      camera.position.x += (beta - camera.position.x) * .07 + 0.35;
+      camera.position.y += (gamma - camera.position.y) * .07 + 0.35;
+    }, false);
+  }
 /* -------------------------------------------------------------------------- */
 /*                         tick and auxiliary functions                       */
 /* -------------------------------------------------------------------------- */
@@ -427,16 +403,11 @@ const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     stats.update()
+    if(!isMobileDevice){
+        camera.position.x += (-mouseX / 8500 - camera.position.x) * .07 + 0.35;
+        camera.position.y += (mouseY / 8500 - camera.position.y) * .1;
+    }
 
-
-    camera.position.x += (-mouseX / 8500 - camera.position.x) * .07 + 0.35;
-    camera.position.y += (mouseY / 8500 - camera.position.y) * .1;
-
-    angles = mouseX / 212
-    angles = map(angles, -10, 10, -5, 5)
-    console.log(angles)
-        // camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / (10 + angles));
-        // console.log(camera)
         // isScrollingDown().then(function(isScrollingDown) {
         //     if (isScrollingDown) {
         //         ScrollDownAnimations()
@@ -453,7 +424,6 @@ const tick = () => {
         //   });
 
     renderer.render(scene, camera)
-
 
     // cpx.innerHTML = "x: " + camerapos.x.toString()
     // cpy.innerHTML = "y: " + camerapos.y.toString()
@@ -505,14 +475,9 @@ function clamp(value, min, max) {
 
 function onDocumentMouseMove(event) {
     mouseX = (event.clientX - windowHalfX) * 4;
-    // mouseX = event.clientX
     mouseY = (event.clientY - windowHalfY) * 4;
-    // mouseY = event.clientY
     mouseOX = Math.abs(mouseX / 4) / windowHalfX
     mouseOY = Math.abs(mouseY / 4) / windowHalfY
-        // if (mouseOX < 0.35) {
-        //     mouseOX = 0
-        // }
     mouseOX = clamp(mouseOX, 0, 1)
     mouseOY = clamp(mouseOY, 0, 1)
 }
@@ -572,3 +537,6 @@ function map(value, min1, max1, min2, max2) {
     const valueScaled = (value - min1) / range1;
     return min2 + (valueScaled * range2);
 }
+
+
+
