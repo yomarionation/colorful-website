@@ -72,7 +72,7 @@ window.addEventListener('resize', () => {
 
 const loader = new GLTFLoader();
 const dracoLoader = new DRACOLoader();
-dracoLoader.setDecoderPath('./draco/');
+dracoLoader.setDecoderPath('');
 loader.setDRACOLoader(dracoLoader);
 
 
