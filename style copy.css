@@ -3,20 +3,17 @@
     padding: 0;
 }
 
+html,
 body {
     overflow-x: hidden;
-    margin: 0px;
-    font-family: monospace;
-    color: white;
 }
-
 
 .webgl {
     position: fixed;
     top: 0;
     left: 0;
     outline: none;
-    z-index: 0;   
+    z-index: 0;
 }
 
 main {
@@ -25,7 +22,7 @@ main {
     z-index: 99;
     position: absolute;
     justify-content: center;
-    text-align: left;
+    text-align: center;
     pointer-events: none;
     font-size: 5vh;
 }
@@ -36,32 +33,29 @@ section {
     font-size: 4vh;
 }
 
-#scrollProgress {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
+.camerapos {
     z-index: 99;
-    font-size: 3vh;
-}
-.camerapos{
-    z-index: 99;   
-    color:white;
+    color: white;
     /* position: absolute; */
     top: 20px;
     left: 20px;
     font-size: 24px;
-   
-   }
+}
 
-   #container {
+#container {
     position: fixed;
     background-color: black;
-  }
+}
 
-  #back{
-    position: fixed;
+#back {
+    position: absolute;
     width: 100%;
     height: 100%;
     background-color: black;
     z-index: -1;
-  }
+}
+
+
+/* headline{
+
+  } */
