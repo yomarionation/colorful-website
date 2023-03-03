@@ -217,9 +217,7 @@ loader.load(
 
                     requestAnimationFrame(animateChildMesh);
                 };
-
                 animateChildMesh();
-
             }
         });
     }
