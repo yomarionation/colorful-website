@@ -1,8 +1,16 @@
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js';
+import {
+    OrbitControls
+} from 'three/examples/jsm/controls/OrbitControls.js';
+import {
+    GLTFLoader
+} from 'three/examples/jsm/loaders/GLTFLoader.js'
+import {
+    DRACOLoader
+} from 'three/examples/jsm/loaders/DRACOLoader.js'
+import {
+    RectAreaLightHelper
+} from 'three/addons/helpers/RectAreaLightHelper.js';
 import Stats from 'three/addons/libs/stats.module.js';
 import model from './public/1.glb?url'
 
@@ -10,17 +18,17 @@ import model from './public/1.glb?url'
 /* -------------------------------------------------------------------------- */
 /*                                 Basic Setup                                */
 /* -------------------------------------------------------------------------- */
-      /* Storing user's device details in a variable*/
-      let details = navigator.userAgent;
-      
-      /* Creating a regular expression
-      containing some mobile devices keywords
-      to search it in details string*/
-      let regexp = /android|iphone|kindle|ipad/i;
-      
-      /* Using test() method to search regexp in details
-      it returns boolean value*/
-      let isMobileDevice = regexp.test(details);
+/* Storing user's device details in a variable*/
+let details = navigator.userAgent;
+
+/* Creating a regular expression
+containing some mobile devices keywords
+to search it in details string*/
+let regexp = /android|iphone|kindle|ipad/i;
+
+/* Using test() method to search regexp in details
+it returns boolean value*/
+let isMobileDevice = regexp.test(details);
 
 let p = [25, 50, 60, 85]
 let mouseX = 0,
@@ -122,8 +130,8 @@ let lgroup2 = []
 let lgroup3 = []
 loader.load(
     model,
-    function(gltf) {
-        gltf.scene.traverse(function(child) {
+    function (gltf) {
+        gltf.scene.traverse(function (child) {
             if (child.isMesh) {
                 let x2 = 0.92;
                 let y2 = 0;
@@ -176,7 +184,8 @@ loader.load(
                 let sizeoffset = 0;
                 let sizemax = 1.5
 
-                const animateChildMesh = function() {
+                const animateChildMesh = function () {
+
                     speedoffset = map(mouseOX, 1, 0.2, .2, 1)
                     t += speedoffset;
                     sizeoffset = map(mouseOX, 1, 0.2, 0, 1)
@@ -208,9 +217,9 @@ loader.load(
 
                     requestAnimationFrame(animateChildMesh);
                 };
-                if(!isMobileDevice){
+
                 animateChildMesh();
-                }
+
             }
         });
     }
@@ -352,7 +361,7 @@ const clock = new THREE.Clock()
 //     }
 // });
 
-if(isMobileDevice){
+if (isMobileDevice) {
     document.getElementById("cb").style.top = '2vh'
     document.getElementById("cb").style.left = '66vw'
 
@@ -364,7 +373,7 @@ if(isMobileDevice){
     document.getElementById("ed").style.fontSize = '2.8vh'
     document.getElementById("ed").style.lineHeight = '3vh'
     document.getElementById("may12").style.fontSize = '7vh'
-    document.getElementById("may12").style.lineHeight = '6.5vh' 
+    document.getElementById("may12").style.lineHeight = '6.5vh'
     document.getElementById("th").style.fontSize = '3vh'
     document.getElementById("th").style.top = '-3vh'
 
@@ -375,28 +384,28 @@ if(isMobileDevice){
     camera.position.set(4.66, .26, 5.88)
     camera.lookAt(-2, 0, 0);
     camera.setFocalLength(35)
-    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 3.5); 
+    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 3.5);
 
-}else{
+} else {
     camera.position.set(4.66, -0.26, 5.88)
     camera.lookAt(-2, 0, 0);
     camera.setFocalLength(25)
-    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);    
+    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);
 }
 
 if (window.DeviceOrientationEvent) {
-    window.addEventListener('deviceorientation', function(event) {
-    //   var alpha = event.alpha;
-      var beta = event.beta;
-      var gamma = event.gamma;
+    window.addEventListener('deviceorientation', function (event) {
+        //   var alpha = event.alpha;
+        var beta = event.beta;
+        var gamma = event.gamma;
 
-      cpx.innerHTML = "x: " + beta
-      cpy.innerHTML = "y: " + gamma
-    //   cpz.innerHTML = "z: " + camerapos.z.toString()
-      camera.position.x += (beta - camera.position.x) * .07 + 0.35;
-      camera.position.y += (gamma - camera.position.y) * .07 + 0.35;
+        cpx.innerHTML = "x: " + beta
+        cpy.innerHTML = "y: " + gamma
+        //   cpz.innerHTML = "z: " + camerapos.z.toString()
+        camera.position.x += (beta - camera.position.x) * .07 + 0.35;
+        camera.position.y += (gamma - camera.position.y) * .07 + 0.35;
     }, false);
-  }
+}
 /* -------------------------------------------------------------------------- */
 /*                         tick and auxiliary functions                       */
 /* -------------------------------------------------------------------------- */
@@ -404,25 +413,25 @@ const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     stats.update()
-    if(!isMobileDevice){
+    if (!isMobileDevice) {
         camera.position.x += (-mouseX / 8500 - camera.position.x) * .07 + 0.35;
         camera.position.y += (mouseY / 8500 - camera.position.y) * .1;
     }
 
-        // isScrollingDown().then(function(isScrollingDown) {
-        //     if (isScrollingDown) {
-        //         ScrollDownAnimations()
-        //         // console.log("down")
-        //     }  else if (isScrollingDown === false) {
-        //         // console.log('Scrolling up by at least 50 pixels');
-        //         ScrollUpAnimations()
-        //         // ScrollDownAnimations()
-        //       } else {
-        //         // console.log('Not scrolling');
-        //         // NoScrollAnimations()
-        //         ScrollDownAnimations()
-        //       }
-        //   });
+    // isScrollingDown().then(function(isScrollingDown) {
+    //     if (isScrollingDown) {
+    //         ScrollDownAnimations()
+    //         // console.log("down")
+    //     }  else if (isScrollingDown === false) {
+    //         // console.log('Scrolling up by at least 50 pixels');
+    //         ScrollUpAnimations()
+    //         // ScrollDownAnimations()
+    //       } else {
+    //         // console.log('Not scrolling');
+    //         // NoScrollAnimations()
+    //         ScrollDownAnimations()
+    //       }
+    //   });
 
     renderer.render(scene, camera)
 
@@ -432,12 +441,14 @@ const tick = () => {
 
     window.requestAnimationFrame(tick)
 }
-document.addEventListener('mousemove', onDocumentMouseMove);
+if (!isMobileDevice) {
+    document.addEventListener('mousemove', onDocumentMouseMove);
+}
 tick()
 
 
 function ScrollDownAnimations() {
-    animationScripts.forEach(function(a) {
+    animationScripts.forEach(function (a) {
         // time = timea
         if (scrollPercent >= a.start && scrollPercent < a.end) {
             a.func();
@@ -446,7 +457,7 @@ function ScrollDownAnimations() {
 }
 
 function ScrollUpAnimations() {
-    animationScriptsup.forEach(function(a) {
+    animationScriptsup.forEach(function (a) {
         if (scrollPercent >= a.start && scrollPercent < a.end) {
             a.func();
         }
@@ -458,7 +469,7 @@ const gridHelper = new THREE.GridHelper(10, 10);
 // scene.add( gridHelper );
 const axesHelper = new THREE.AxesHelper(5);
 axesHelper.setColors(0xff0000, 0xffff00, 0x0000ff)
-    // scene.add( axesHelper );
+// scene.add( axesHelper );
 
 function lerp(x, y, a) {
     return (1 - a) * x + a * y
@@ -477,11 +488,13 @@ function clamp(value, min, max) {
 function onDocumentMouseMove(event) {
     mouseX = (event.clientX - windowHalfX) * 4;
     mouseY = (event.clientY - windowHalfY) * 4;
-    mouseOX = Math.abs(mouseX / 4) / windowHalfX
-    mouseOY = Math.abs(mouseY / 4) / windowHalfY
+
+    mouseOX = 0
+
+    mouseOX = Math.abs(mouseX / 4) / windowHalfX;
     mouseOX = clamp(mouseOX, 0, 1)
-    mouseOY = clamp(mouseOY, 0, 1)
 }
+
 
 
 function isScrollingDown() {
@@ -489,8 +502,8 @@ function isScrollingDown() {
     var currentScrollY = window.scrollY;
 
     // Wait for a short period of time to get the next scroll position
-    return new Promise(function(resolve, reject) {
-        setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+        setTimeout(function () {
             // Get the next scroll position
             var nextScrollY = window.scrollY;
 
@@ -523,7 +536,7 @@ function getValue() {
         a = elapsedTime / 1000; // calculate new value of a
     }
 
-    setTimeout(function() {
+    setTimeout(function () {
         return a;
     }, 10);
 }
@@ -538,6 +551,3 @@ function map(value, min1, max1, min2, max2) {
     const valueScaled = (value - min1) / range1;
     return min2 + (valueScaled * range2);
 }
-
-
-
