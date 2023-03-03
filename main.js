@@ -208,8 +208,9 @@ loader.load(
 
                     requestAnimationFrame(animateChildMesh);
                 };
-
+                if(!isMobileDevice){
                 animateChildMesh();
+                }
             }
         });
     }
