@@ -33,7 +33,8 @@ let targetY = 0;
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
 const stats = Stats()
-document.body.appendChild(stats.dom)
+// document.body.appendChild(stats.dom)
+
 
 const sizes = {
     width: window.innerWidth,
@@ -106,7 +107,7 @@ light2.shadow.mapSize.height = 4096;
 scene.add(light2);
 scene.add(light3);
 
-const lighth = new THREE.HemisphereLight(0xcccccc, 0.00005);
+const lighth = new THREE.HemisphereLight(0x7c7c7c, 0.5);
 scene.add(lighth);
 
 // const pointLightHelper = new THREE.PointLightHelper(light1, 1);

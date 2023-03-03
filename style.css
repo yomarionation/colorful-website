@@ -8,6 +8,17 @@ body {
     margin: 0px;
     font-family: monospace;
     color: white;
+
+}
+
+#titlelayout{
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    left: 0;
+    z-index: -1; 
+    height: 100vh;
 }
 
 
@@ -63,5 +74,26 @@ section {
     width: 100%;
     height: 100%;
     background-color: black;
+    z-index: -2;
+  }
+
+  #cb{
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 4vh;
+    left: 4.5vw;
+    z-index: 0; 
+    height: 14vh;
+  }
+
+  #b{
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    top: 69vh;
+    left: 4.5vw;
+    z-index: 1; 
+    height: 6vh;
     z-index: -1;
   }
