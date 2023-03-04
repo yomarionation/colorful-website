@@ -379,7 +379,7 @@ if (isMobileDevice) {
     document.getElementById("b1").style.zIndex = '5'
     document.getElementById("b2").style.zIndex = '5'
 
-    camera.position.set(4.66, .26, 5.88)
+    camera.position.set(6.86, .26, 5.88)
     camera.lookAt(-2, 0, 0);
     camera.setFocalLength(35)
     camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 3.5);
