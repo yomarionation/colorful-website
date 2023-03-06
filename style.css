@@ -12,7 +12,6 @@ body {
     margin: 0px;
 }
 
-
 .webgl {
     position: fixed;
     top: 0;
@@ -25,7 +24,7 @@ body {
     position: fixed;
     top: -50vh;
     width: 100vw;
-    height:150vh;
+    height: 150vh;
     background-color: black;
     z-index: -2;
 }
@@ -46,8 +45,8 @@ body {
     left: 4.5vw;
     z-index: -1;
     font-family: 'VTCcolorful';
-
 }
+
 
 /* #ptitle {} */
 
@@ -62,6 +61,7 @@ body {
     font-size: 5vh;
     color: #55FF26;
 }
+
 #may12 {
     line-height: 10vh;
     font-size: 12.5vh;
@@ -88,7 +88,7 @@ body {
 .mobilebutton {
     position: fixed;
     left: 4.5vw;
-    width:30vw;
+    width: 30vw;
     z-index: -5;
 }
 
@@ -98,4 +98,27 @@ body {
 
 #b1 {
     top: 29.5vh;
+}
+
+#phonedirectionbtn {
+    position: fixed;
+    font-family: 'VTCcolorful';
+    font-size: 3vh;
+    border-radius: 0;
+    border-width: 0.125vh;
+    height: 4.27vh;
+    width: 38.27vw;
+    z-index: 10;
+    top: 79.5vh;
+    left: 4.5vw;
+}
+
+.btnoff {
+    color: #ffffff;
+    background-color: #000;
+}
+
+.btnon {
+    color: #000;
+    background-color: #fff;
 }

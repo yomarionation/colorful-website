@@ -40,7 +40,7 @@ let targetY = 0;
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
 const stats = Stats()
-// document.body.appendChild(stats.dom)
+    // document.body.appendChild(stats.dom)
 
 
 const sizes = {
@@ -52,7 +52,7 @@ const canvas = document.querySelector('canvas.webgl')
 
 const scene = new THREE.Scene()
 
-scene.fog = new THREE.Fog(0x000000, 8, 18);
+// scene.fog = new THREE.Fog(0x000000, 8, 18);
 
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
 
@@ -130,8 +130,8 @@ let lgroup2 = []
 let lgroup3 = []
 loader.load(
     model,
-    function (gltf) {
-        gltf.scene.traverse(function (child) {
+    function(gltf) {
+        gltf.scene.traverse(function(child) {
             if (child.isMesh) {
                 let x2 = 0.92;
                 let y2 = 0;
@@ -184,7 +184,7 @@ loader.load(
                 let sizeoffset = 0;
                 let sizemax = 1.5
 
-                const animateChildMesh = function () {
+                const animateChildMesh = function() {
 
                     speedoffset = map(mouseOX, 1, 0.2, .2, 1)
                     t += speedoffset;
@@ -242,6 +242,230 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 // controls.enableZoom = false
 
 const clock = new THREE.Clock()
+
+
+
+if (isMobileDevice) {
+    document.getElementById("cb").style.top = '2vh'
+    document.getElementById("cb").style.left = '66vw'
+
+    document.getElementById("titles").style.top = '5vh'
+    document.getElementById("titles").style.width = '50vw'
+
+    document.getElementById("mw").style.fontSize = '7vh'
+    document.getElementById("mw").style.lineHeight = '6vh'
+    document.getElementById("ed").style.fontSize = '2.8vh'
+    document.getElementById("ed").style.lineHeight = '3vh'
+    document.getElementById("may12").style.fontSize = '7vh'
+    document.getElementById("may12").style.lineHeight = '6.5vh'
+    document.getElementById("th").style.fontSize = '3vh'
+    document.getElementById("th").style.top = '-3vh'
+
+    document.getElementById("b").style.zIndex = '-5'
+    document.getElementById("b1").style.zIndex = '5'
+    document.getElementById("b2").style.zIndex = '5'
+
+    camera.position.set(6.86, .26, 5.88)
+    camera.lookAt(-2, 0, 0);
+    camera.setFocalLength(35)
+    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 3.5);
+
+} else {
+    camera.position.set(4.66, -0.26, 5.88)
+    camera.lookAt(-2, 0, 0);
+    camera.setFocalLength(25)
+    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);
+}
+
+let beta = 0,
+    gamma = 0;
+let orientationbtn = document.getElementById("phonedirectionbtn")
+orientationbtn.classList.add('btnoff');
+let orientationbtnonoff = true
+orientationbtn.addEventListener("click", function() {
+    orientationbtnonoff = !orientationbtnonoff
+
+    if (orientationbtnonoff) {
+        orientationbtn.classList.remove('btnon');
+        orientationbtn.classList.add('btnoff');
+    } else {
+        orientationbtn.classList.remove('btnoff');
+        orientationbtn.classList.add('btnon');
+    }
+    myFunction(orientationbtnonoff)
+});
+
+function myFunction(isEnabled) {
+    if (typeof(DeviceOrientationEvent) !== 'undefined' && typeof(DeviceOrientationEvent.requestPermission) === 'function') {
+        DeviceOrientationEvent.requestPermission().then(permissionState => {
+            if (permissionState === 'granted') {
+                // deviceorientation
+                window.addEventListener('deviceorientation', function(event) {
+                    if (!isEnabled) {
+                        beta = event.beta / 10 - 5;
+                        gamma = event.gamma / 10;
+                        console.log("mobileismoving");
+                        camera.position.x += (beta - camera.position.x) * .008 + 0.042;
+                        camera.position.y += (gamma - camera.position.y) * .008 + 0.002;
+                    } else {
+                        console.log("nomoving");
+                    }
+                }, true);
+                // deviceorientation
+            }
+        }).catch(console.error);
+
+    }
+
+}
+
+
+/* -------------------------------------------------------------------------- */
+/*                         tick and auxiliary functions                       */
+/* -------------------------------------------------------------------------- */
+const tick = () => {
+    const elapsedTime = clock.getElapsedTime()
+
+    stats.update()
+    if (!isMobileDevice) {
+        camera.position.x += (-mouseX / 8500 - camera.position.x) * .07 + 0.35;
+        camera.position.y += (mouseY / 8500 - camera.position.y) * .1;
+    }
+
+    // isScrollingDown().then(function(isScrollingDown) {
+    //     if (isScrollingDown) {
+    //         ScrollDownAnimations()
+    //         // console.log("down")
+    //     }  else if (isScrollingDown === false) {
+    //         // console.log('Scrolling up by at least 50 pixels');
+    //         ScrollUpAnimations()
+    //         // ScrollDownAnimations()
+    //       } else {
+    //         // console.log('Not scrolling');
+    //         // NoScrollAnimations()
+    //         ScrollDownAnimations()
+    //       }
+    //   });
+
+    renderer.render(scene, camera)
+
+    // cpx.innerHTML = "x: " + camerapos.x.toString()
+    // cpy.innerHTML = "y: " + camerapos.y.toString()
+    // cpz.innerHTML = "z: " + camerapos.z.toString()
+
+    window.requestAnimationFrame(tick)
+}
+if (!isMobileDevice) {
+    document.addEventListener('mousemove', onDocumentMouseMove);
+}
+tick()
+
+
+function ScrollDownAnimations() {
+    animationScripts.forEach(function(a) {
+        // time = timea
+        if (scrollPercent >= a.start && scrollPercent < a.end) {
+            a.func();
+        }
+    });
+}
+
+function ScrollUpAnimations() {
+    animationScriptsup.forEach(function(a) {
+        if (scrollPercent >= a.start && scrollPercent < a.end) {
+            a.func();
+        }
+    });
+}
+
+
+const gridHelper = new THREE.GridHelper(10, 10);
+// scene.add( gridHelper );
+const axesHelper = new THREE.AxesHelper(5);
+axesHelper.setColors(0xff0000, 0xffff00, 0x0000ff)
+    // scene.add( axesHelper );
+
+function lerp(x, y, a) {
+    return (1 - a) * x + a * y
+}
+
+function scalePercent(start, end) {
+    let reTurn = (scrollPercent - start) / (end - start)
+    reTurn = clamp(reTurn, 0, 1)
+    return reTurn
+}
+
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+
+function onDocumentMouseMove(event) {
+    mouseX = (event.clientX - windowHalfX) * 4;
+    mouseY = (event.clientY - windowHalfY) * 4;
+
+    mouseOX = 0
+
+    mouseOX = Math.abs(mouseX / 4) / windowHalfX;
+    mouseOX = clamp(mouseOX, 0, 1)
+}
+
+
+
+function isScrollingDown() {
+    // Get the current scroll position
+    var currentScrollY = window.scrollY;
+
+    // Wait for a short period of time to get the next scroll position
+    return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+            // Get the next scroll position
+            var nextScrollY = window.scrollY;
+
+            // Calculate the difference between the current and next scroll positions
+            var scrollDiff = nextScrollY - currentScrollY;
+
+            // Determine if we're scrolling down by at least 50 pixels
+            if (scrollDiff > 0) {
+                // If the scroll difference is greater than 50, we're scrolling down
+                resolve(true);
+            } else if (scrollDiff < -0.08) {
+                // If the scroll difference is less than -50, we're scrolling up
+                resolve(false);
+            } else {
+                // If the scroll difference is within the threshold, we're not scrolling
+                resolve(null);
+            }
+        }, 100);
+    });
+}
+
+
+function getValue() {
+    let startTime = Date.now(); // get current time in milliseconds
+    let endTime = startTime + 1000; // 1 second later
+    let a = 0; // initial value of a
+
+    while (Date.now() < endTime) {
+        let elapsedTime = Date.now() - startTime; // time elapsed since start
+        a = elapsedTime / 1000; // calculate new value of a
+    }
+
+    setTimeout(function() {
+        return a;
+    }, 10);
+}
+
+function radiansToPi(radians) {
+    return radians / Math.PI;
+}
+
+function map(value, min1, max1, min2, max2) {
+    const range1 = max1 - min1;
+    const range2 = max2 - min2;
+    const valueScaled = (value - min1) / range1;
+    return min2 + (valueScaled * range2);
+}
+
 
 /* -------------------------------------------------------------------------- */
 /*                               scroll function                              */
@@ -358,194 +582,3 @@ const clock = new THREE.Clock()
 //         camera.position.z = lerp(b[2], camera.position.z, scalePercent(p[2], p[3]));
 //     }
 // });
-
-if (isMobileDevice) {
-    document.getElementById("cb").style.top = '2vh'
-    document.getElementById("cb").style.left = '66vw'
-
-    document.getElementById("titles").style.top = '5vh'
-    document.getElementById("titles").style.width = '50vw'
-
-    document.getElementById("mw").style.fontSize = '7vh'
-    document.getElementById("mw").style.lineHeight = '6vh'
-    document.getElementById("ed").style.fontSize = '2.8vh'
-    document.getElementById("ed").style.lineHeight = '3vh'
-    document.getElementById("may12").style.fontSize = '7vh'
-    document.getElementById("may12").style.lineHeight = '6.5vh'
-    document.getElementById("th").style.fontSize = '3vh'
-    document.getElementById("th").style.top = '-3vh'
-
-    document.getElementById("b").style.zIndex = '-5'
-    document.getElementById("b1").style.zIndex = '5'
-    document.getElementById("b2").style.zIndex = '5'
-
-    camera.position.set(6.86, .26, 5.88)
-    camera.lookAt(-2, 0, 0);
-    camera.setFocalLength(35)
-    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 3.5);
-
-} else {
-    camera.position.set(4.66, -0.26, 5.88)
-    camera.lookAt(-2, 0, 0);
-    camera.setFocalLength(25)
-    camera.rotateOnAxis(new THREE.Vector3(0, 0, 1), Math.PI / 10);
-}
-
-if (window.DeviceOrientationEvent) {
-    window.addEventListener('deviceorientation', function (event) {
-        //   var alpha = event.alpha;
-        var beta = event.beta;
-        var gamma = event.gamma;
-
-        cpx.innerHTML = "x: " + beta
-        cpy.innerHTML = "y: " + gamma
-        //   cpz.innerHTML = "z: " + camerapos.z.toString()
-        camera.position.x += (beta - camera.position.x) * .07 + 0.35;
-        camera.position.y += (gamma - camera.position.y) * .07 + 0.35;
-    }, false);
-}
-/* -------------------------------------------------------------------------- */
-/*                         tick and auxiliary functions                       */
-/* -------------------------------------------------------------------------- */
-const tick = () => {
-    const elapsedTime = clock.getElapsedTime()
-
-    stats.update()
-    if (!isMobileDevice) {
-        camera.position.x += (-mouseX / 8500 - camera.position.x) * .07 + 0.35;
-        camera.position.y += (mouseY / 8500 - camera.position.y) * .1;
-    }
-
-    // isScrollingDown().then(function(isScrollingDown) {
-    //     if (isScrollingDown) {
-    //         ScrollDownAnimations()
-    //         // console.log("down")
-    //     }  else if (isScrollingDown === false) {
-    //         // console.log('Scrolling up by at least 50 pixels');
-    //         ScrollUpAnimations()
-    //         // ScrollDownAnimations()
-    //       } else {
-    //         // console.log('Not scrolling');
-    //         // NoScrollAnimations()
-    //         ScrollDownAnimations()
-    //       }
-    //   });
-
-    renderer.render(scene, camera)
-
-    // cpx.innerHTML = "x: " + camerapos.x.toString()
-    // cpy.innerHTML = "y: " + camerapos.y.toString()
-    // cpz.innerHTML = "z: " + camerapos.z.toString()
-
-    window.requestAnimationFrame(tick)
-}
-if (!isMobileDevice) {
-    document.addEventListener('mousemove', onDocumentMouseMove);
-}
-tick()
-
-
-function ScrollDownAnimations() {
-    animationScripts.forEach(function (a) {
-        // time = timea
-        if (scrollPercent >= a.start && scrollPercent < a.end) {
-            a.func();
-        }
-    });
-}
-
-function ScrollUpAnimations() {
-    animationScriptsup.forEach(function (a) {
-        if (scrollPercent >= a.start && scrollPercent < a.end) {
-            a.func();
-        }
-    });
-}
-
-
-const gridHelper = new THREE.GridHelper(10, 10);
-// scene.add( gridHelper );
-const axesHelper = new THREE.AxesHelper(5);
-axesHelper.setColors(0xff0000, 0xffff00, 0x0000ff)
-// scene.add( axesHelper );
-
-function lerp(x, y, a) {
-    return (1 - a) * x + a * y
-}
-
-function scalePercent(start, end) {
-    let reTurn = (scrollPercent - start) / (end - start)
-    reTurn = clamp(reTurn, 0, 1)
-    return reTurn
-}
-
-function clamp(value, min, max) {
-    return Math.min(Math.max(value, min), max);
-}
-
-function onDocumentMouseMove(event) {
-    mouseX = (event.clientX - windowHalfX) * 4;
-    mouseY = (event.clientY - windowHalfY) * 4;
-
-    mouseOX = 0
-
-    mouseOX = Math.abs(mouseX / 4) / windowHalfX;
-    mouseOX = clamp(mouseOX, 0, 1)
-}
-
-
-
-function isScrollingDown() {
-    // Get the current scroll position
-    var currentScrollY = window.scrollY;
-
-    // Wait for a short period of time to get the next scroll position
-    return new Promise(function (resolve, reject) {
-        setTimeout(function () {
-            // Get the next scroll position
-            var nextScrollY = window.scrollY;
-
-            // Calculate the difference between the current and next scroll positions
-            var scrollDiff = nextScrollY - currentScrollY;
-
-            // Determine if we're scrolling down by at least 50 pixels
-            if (scrollDiff > 0) {
-                // If the scroll difference is greater than 50, we're scrolling down
-                resolve(true);
-            } else if (scrollDiff < -0.08) {
-                // If the scroll difference is less than -50, we're scrolling up
-                resolve(false);
-            } else {
-                // If the scroll difference is within the threshold, we're not scrolling
-                resolve(null);
-            }
-        }, 100);
-    });
-}
-
-
-function getValue() {
-    let startTime = Date.now(); // get current time in milliseconds
-    let endTime = startTime + 1000; // 1 second later
-    let a = 0; // initial value of a
-
-    while (Date.now() < endTime) {
-        let elapsedTime = Date.now() - startTime; // time elapsed since start
-        a = elapsedTime / 1000; // calculate new value of a
-    }
-
-    setTimeout(function () {
-        return a;
-    }, 10);
-}
-
-function radiansToPi(radians) {
-    return radians / Math.PI;
-}
-
-function map(value, min1, max1, min2, max2) {
-    const range1 = max1 - min1;
-    const range2 = max2 - min2;
-    const valueScaled = (value - min1) / range1;
-    return min2 + (valueScaled * range2);
-}
