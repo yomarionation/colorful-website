@@ -8,6 +8,11 @@
     src: url('public/VTCColorful-Regular.ttf');
 }
 
+@font-face {
+    font-family: 'body';
+    src: url('public/HalyardText-Reg.otf');
+}
+
 body {
     margin: 0px;
 }
@@ -116,9 +121,30 @@ body {
 .btnoff {
     color: #ffffff;
     background-color: #000;
+    /* display: none; */
 }
 
 .btnon {
     color: #000;
     background-color: #fff;
+}
+
+#i {
+    position: fixed;
+    width: 20.27vw;
+    z-index: 10;
+    top: 76.5vh;
+    left: 4.5vw;
+    display: none;
+}
+
+#restartindication {
+    font-family: 'body';
+    position: fixed;
+    font-size: 2vh;
+    color: #fff;
+    top: 84.5vh;
+    left: 4.5vw;
+    z-index: 10;
+    display: none;
 }

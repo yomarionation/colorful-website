@@ -280,45 +280,77 @@ if (isMobileDevice) {
 let beta = 0,
     gamma = 0;
 let orientationbtn = document.getElementById("phonedirectionbtn")
+    // let orientationbtn = document.getElementById("phonedirectionbtn")
 orientationbtn.classList.add('btnoff');
+orientationbtn.style.display = "none";
+
 let orientationbtnonoff = true
-orientationbtn.addEventListener("click", function() {
-    orientationbtnonoff = !orientationbtnonoff
+    // orientationbtn.addEventListener("click", function() {
+    //     orientationbtnonoff = !orientationbtnonoff
+    //     if (orientationbtnonoff) {
+    //         orientationbtn.classList.remove('btnon');
+    //         orientationbtn.classList.add('btnoff');
+    //     } else {
+    //         orientationbtn.classList.remove('btnoff');
+    //         orientationbtn.classList.add('btnon');
+    //     }
+    // });
+orientationinit()
+clickrequest()
 
-    if (orientationbtnonoff) {
-        orientationbtn.classList.remove('btnon');
-        orientationbtn.classList.add('btnoff');
-    } else {
-        orientationbtn.classList.remove('btnoff');
-        orientationbtn.classList.add('btnon');
-    }
-    myFunction(orientationbtnonoff)
-});
-
-function myFunction(isEnabled) {
-    if (typeof(DeviceOrientationEvent) !== 'undefined' && typeof(DeviceOrientationEvent.requestPermission) === 'function') {
-        DeviceOrientationEvent.requestPermission().then(permissionState => {
-            if (permissionState === 'granted') {
-                // deviceorientation
-                window.addEventListener('deviceorientation', function(event) {
-                    if (!isEnabled) {
-                        beta = event.beta / 10 - 5;
-                        gamma = event.gamma / 10;
-                        console.log("mobileismoving");
-                        camera.position.x += (beta - camera.position.x) * .008 + 0.042;
-                        camera.position.y += (gamma - camera.position.y) * .008 + 0.002;
-                    } else {
-                        console.log("nomoving");
-                    }
-                }, true);
-                // deviceorientation
-            }
-        }).catch(console.error);
-
-    }
-
+function clickrequest() {
+    orientationbtn.addEventListener("click", function() {
+        // Check if motion access has been denied before
+        if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+            DeviceMotionEvent.requestPermission().then(permissionState => {
+                if (permissionState === "granted") {
+                    console.log("3")
+                    orientationmove()
+                } else {
+                    orientationbtn.style.display = "none";
+                    console.log("no3")
+                    document.getElementById("restartindication").style.display = "block"
+                }
+            }).catch(console.error);
+        }
+    });
 }
 
+
+
+function orientationinit() {
+    if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
+        orientationbtn.style.display = "block";
+        // if (DeviceMotionEvent.requestPermission === 'denied') { console.log("denied") } else {
+        DeviceMotionEvent.requestPermission().then(permissionState => {
+            if (permissionState === "granted") {
+                console.log("2")
+                orientationmove()
+            } else {
+                orientationbtn.style.display = "none";
+                // orientationinit()
+                document.getElementById("restartindication").style.display = "block"
+                console.log("no2")
+            }
+        }).catch(console.error);
+        // }
+        // console.log(DeviceMotionEvent.requestPermission)
+    }
+}
+
+
+// console.log("1")
+
+function orientationmove() {
+    document.getElementById("i").style.display = "block"
+    orientationbtn.style.display = "none";
+    window.addEventListener('deviceorientation', function(event) {
+        beta = event.beta / 10 - 3;
+        gamma = event.gamma / 10;
+        camera.position.x += (beta - camera.position.x) * .008 + 0.042;
+        camera.position.y += (gamma - camera.position.y) * .008 + 0.002;
+    }, true);
+}
 
 /* -------------------------------------------------------------------------- */
 /*                         tick and auxiliary functions                       */
@@ -582,3 +614,33 @@ function map(value, min1, max1, min2, max2) {
 //         camera.position.z = lerp(b[2], camera.position.z, scalePercent(p[2], p[3]));
 //     }
 // });
+
+
+
+
+// hideButton()
+
+// if (webapi.deviceorientationactive) {
+//     addEventListener(move)
+// } else if (webapi.exists && !webapi.deviceorientationactive) {
+//     showButton();
+// }
+
+// onButtonClick() {
+//     if (webapi.deviceorientationactive) {
+//         return;
+//     }
+//     askPermission().then(answer => {
+//         if (answer == true) {
+//             hideButton()
+//             addEventListener(move)
+//         } else {
+//             donothing()
+//         }
+//     })
+// }
+
+// move = function () {
+//     params = webapi.parameters
+//     move3d(params)
+// }
