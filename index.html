@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="style.css">
 
     <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css"> -->
     <!-- <meta name="viewport" content="width=device-width, initial-scale=1"> -->
@@ -18,10 +18,13 @@
 
 <body>
 
-    <img src = "public/cb.png" id="cb"/>
-    <img src = "public/buttons.svg" id="b"/>
-    <img src = "public/button1.svg" id="b1" class="mobilebutton"/>
-    <img src = "public/button2.svg" id="b2" class="mobilebutton"/>
+    <img src="public/cb.png" id="cb" />
+    <img src="public/buttons.svg" id="b" />
+    <img src="public/button1.svg" id="b1" class="mobilebutton" />
+    <img src="public/button2.svg" id="b2" class="mobilebutton" />
+    <img src="public/indication.svg" id="i" />
+
+    <button id="phonedirectionbtn">Wave your phone</button>
 
     <p id="container">
         <span id="x" class="camerapos"></span><br>
@@ -30,15 +33,15 @@
     </p>
     <div id="titles">
         <p id="ptitle">
-        <span id="mw">MAKE WAVES</span><br>
-        <span id="ed">Entry Deadline:</span><br>
-        <span id="may12">May 12</span>
-        <span id="th">th</span>
-    </p>
+            <span id="mw">MAKE WAVES</span><br>
+            <span id="ed">Entry Deadline:</span><br>
+            <span id="may12">May 12</span>
+            <span id="th">th</span>
+        </p>
     </div>
     <canvas class="webgl"></canvas>
     <div id="back"></div>
-
+    <div id="restartindication">*Restart browser to wave your phone</div>
     <script type="module" src="main.js" async defer></script>
 
 </body>
