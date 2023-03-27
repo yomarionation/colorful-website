@@ -8,7 +8,7 @@ The `production` branch is deployed automatically to https://sunday-afternoon-de
 
 We use https://vitejs.dev/ to build the code.
 
-Some draco-specific files can't be included in the build via regular import and are referenced in the code as static files.
+Some three.js specific files can't be included in the build via regular import and are referenced in the code as static files. Info about these files here: https://threejs.org/docs/#examples/en/loaders/DRACOLoader and here: https://threejs.org/docs/#manual/en/introduction/Installation, under "Addons"
 
 These files live in the `public` folder. The build process copies them over to the root of the `dist` folder, used as the prod root.
 
