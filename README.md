@@ -14,4 +14,4 @@ These files live in the `public` folder. The build process copies them over to t
 
 The line `dracoLoader.setDecoderPath('xxx');` sets `'xxx'` as the path to these files. These two options use the same path for dev and prod environments:
 - put the files in `public` and set `''` as the path
-- put the files in `public/draco` and set `./draco/` as the path — NB: this seems to go against the vite guidelines, see https://vitejs.dev/guide/assets.html#the-public-directory
+- put the files in `public/draco` and set `'./draco/'` as the path — NB: this seems to go against the vite guidelines, see https://vitejs.dev/guide/assets.html#the-public-directory
