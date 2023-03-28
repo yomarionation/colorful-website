@@ -1,5 +1,6 @@
 {
     "dependencies": {
+        "ismobilejs": "^1.1.1",
         "three": "^0.150.0",
         "vite": "^4.1.4"
     },
