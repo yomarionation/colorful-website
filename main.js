@@ -1,47 +1,37 @@
 import * as THREE from 'three'
 import {
-    OrbitControls
-} from 'three/examples/jsm/controls/OrbitControls.js';
-import {
     GLTFLoader
 } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import {
     DRACOLoader
 } from 'three/examples/jsm/loaders/DRACOLoader.js'
-import {
-    RectAreaLightHelper
-} from 'three/addons/helpers/RectAreaLightHelper.js';
-import Stats from 'three/addons/libs/stats.module.js';
+
 import model from './public/1.glb?url'
+import isMobile from 'ismobilejs';
+// const userAgent = req.headers['user-agent'];
 
 
 /* -------------------------------------------------------------------------- */
 /*                                 Basic Setup                                */
 /* -------------------------------------------------------------------------- */
-/* Storing user's device details in a variable*/
+// /* Storing user's device details in a variable*/
 let details = navigator.userAgent;
 
-/* Creating a regular expression
-containing some mobile devices keywords
-to search it in details string*/
+// /* Creating a regular expression
+// containing some mobile devices keywords
+// to search it in details string*/
 let regexp = /android|iphone|kindle|ipad/i;
 
-/* Using test() method to search regexp in details
-it returns boolean value*/
-let isMobileDevice = regexp.test(details);
-
-let p = [25, 50, 60, 85]
+// /* Using test() method to search regexp in details
+// it returns boolean value*/
+let isMobileDevice = isMobile(window.navigator).any;
+// console.log(isMobileDevice);
+// console.log();
 let mouseX = 0,
     mouseY = 0;
-let mouseOX = 0,
-    mouseOY = 0;
-let targetX = 0;
-let targetY = 0;
+let mouseOX = 0;
 let windowHalfX = window.innerWidth / 2;
 let windowHalfY = window.innerHeight / 2;
-const stats = Stats()
-    // document.body.appendChild(stats.dom)
-
 
 const sizes = {
     width: window.innerWidth,
@@ -49,20 +39,8 @@ const sizes = {
 }
 
 const canvas = document.querySelector('canvas.webgl')
-
 const scene = new THREE.Scene()
-
-// scene.fog = new THREE.Fog(0x000000, 8, 18);
-
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 1000)
-
-let a = [2.1, -1.1, 4.3]
-let b = [-0.3, 1.5, 3.2]
-let c = [-2.3, 0.9, 1.8]
-let cpx = document.getElementById('x')
-let cpy = document.getElementById('y')
-let cpz = document.getElementById('z')
-let camerapos = camera.position
 
 scene.add(camera)
 
@@ -186,9 +164,9 @@ loader.load(
 
                 const animateChildMesh = function() {
 
-                    speedoffset = map(mouseOX, 1, 0.2, .2, 1)
+                    speedoffset = map(mouseOX, 1, 0.2, .5, 1)
                     t += speedoffset;
-                    sizeoffset = map(mouseOX, 1, 0.2, 0, 1)
+                    sizeoffset = map(mouseOX, 1, 0.2, 0.2, 1.15)
 
                     for (let i = 0; i < indexnumber; i++) {
                         let positionindex3 = -i * .18
@@ -237,14 +215,6 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-// const controls = new OrbitControls(camera, renderer.domElement);
-// controls.enabled = false
-// controls.enableZoom = false
-
-const clock = new THREE.Clock()
-
-
-
 if (isMobileDevice) {
     document.getElementById("cb").style.top = '2vh'
     document.getElementById("cb").style.left = '66vw'
@@ -280,27 +250,14 @@ if (isMobileDevice) {
 let beta = 0,
     gamma = 0;
 let orientationbtn = document.getElementById("phonedirectionbtn")
-    // let orientationbtn = document.getElementById("phonedirectionbtn")
 orientationbtn.classList.add('btnoff');
 orientationbtn.style.display = "none";
 
-let orientationbtnonoff = true
-    // orientationbtn.addEventListener("click", function() {
-    //     orientationbtnonoff = !orientationbtnonoff
-    //     if (orientationbtnonoff) {
-    //         orientationbtn.classList.remove('btnon');
-    //         orientationbtn.classList.add('btnoff');
-    //     } else {
-    //         orientationbtn.classList.remove('btnoff');
-    //         orientationbtn.classList.add('btnon');
-    //     }
-    // });
 orientationinit()
 clickrequest()
 
 function clickrequest() {
     orientationbtn.addEventListener("click", function() {
-        // Check if motion access has been denied before
         if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
             DeviceMotionEvent.requestPermission().then(permissionState => {
                 if (permissionState === "granted") {
@@ -316,30 +273,21 @@ function clickrequest() {
     });
 }
 
-
-
 function orientationinit() {
     if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
         orientationbtn.style.display = "block";
-        // if (DeviceMotionEvent.requestPermission === 'denied') { console.log("denied") } else {
         DeviceMotionEvent.requestPermission().then(permissionState => {
             if (permissionState === "granted") {
                 console.log("2")
                 orientationmove()
             } else {
                 orientationbtn.style.display = "none";
-                // orientationinit()
                 document.getElementById("restartindication").style.display = "block"
                 console.log("no2")
             }
         }).catch(console.error);
-        // }
-        // console.log(DeviceMotionEvent.requestPermission)
     }
 }
-
-
-// console.log("1")
 
 function orientationmove() {
     document.getElementById("i").style.display = "block"
@@ -356,75 +304,23 @@ function orientationmove() {
 /*                         tick and auxiliary functions                       */
 /* -------------------------------------------------------------------------- */
 const tick = () => {
-    const elapsedTime = clock.getElapsedTime()
-
-    stats.update()
     if (!isMobileDevice) {
         camera.position.x += (-mouseX / 8500 - camera.position.x) * .07 + 0.35;
         camera.position.y += (mouseY / 8500 - camera.position.y) * .1;
     }
 
-    // isScrollingDown().then(function(isScrollingDown) {
-    //     if (isScrollingDown) {
-    //         ScrollDownAnimations()
-    //         // console.log("down")
-    //     }  else if (isScrollingDown === false) {
-    //         // console.log('Scrolling up by at least 50 pixels');
-    //         ScrollUpAnimations()
-    //         // ScrollDownAnimations()
-    //       } else {
-    //         // console.log('Not scrolling');
-    //         // NoScrollAnimations()
-    //         ScrollDownAnimations()
-    //       }
-    //   });
-
     renderer.render(scene, camera)
-
-    // cpx.innerHTML = "x: " + camerapos.x.toString()
-    // cpy.innerHTML = "y: " + camerapos.y.toString()
-    // cpz.innerHTML = "z: " + camerapos.z.toString()
 
     window.requestAnimationFrame(tick)
 }
 if (!isMobileDevice) {
     document.addEventListener('mousemove', onDocumentMouseMove);
 }
+
 tick()
-
-
-function ScrollDownAnimations() {
-    animationScripts.forEach(function(a) {
-        // time = timea
-        if (scrollPercent >= a.start && scrollPercent < a.end) {
-            a.func();
-        }
-    });
-}
-
-function ScrollUpAnimations() {
-    animationScriptsup.forEach(function(a) {
-        if (scrollPercent >= a.start && scrollPercent < a.end) {
-            a.func();
-        }
-    });
-}
-
-
-const gridHelper = new THREE.GridHelper(10, 10);
-// scene.add( gridHelper );
-const axesHelper = new THREE.AxesHelper(5);
-axesHelper.setColors(0xff0000, 0xffff00, 0x0000ff)
-    // scene.add( axesHelper );
 
 function lerp(x, y, a) {
     return (1 - a) * x + a * y
-}
-
-function scalePercent(start, end) {
-    let reTurn = (scrollPercent - start) / (end - start)
-    reTurn = clamp(reTurn, 0, 1)
-    return reTurn
 }
 
 function clamp(value, min, max) {
@@ -441,206 +337,9 @@ function onDocumentMouseMove(event) {
     mouseOX = clamp(mouseOX, 0, 1)
 }
 
-
-
-function isScrollingDown() {
-    // Get the current scroll position
-    var currentScrollY = window.scrollY;
-
-    // Wait for a short period of time to get the next scroll position
-    return new Promise(function(resolve, reject) {
-        setTimeout(function() {
-            // Get the next scroll position
-            var nextScrollY = window.scrollY;
-
-            // Calculate the difference between the current and next scroll positions
-            var scrollDiff = nextScrollY - currentScrollY;
-
-            // Determine if we're scrolling down by at least 50 pixels
-            if (scrollDiff > 0) {
-                // If the scroll difference is greater than 50, we're scrolling down
-                resolve(true);
-            } else if (scrollDiff < -0.08) {
-                // If the scroll difference is less than -50, we're scrolling up
-                resolve(false);
-            } else {
-                // If the scroll difference is within the threshold, we're not scrolling
-                resolve(null);
-            }
-        }, 100);
-    });
-}
-
-
-function getValue() {
-    let startTime = Date.now(); // get current time in milliseconds
-    let endTime = startTime + 1000; // 1 second later
-    let a = 0; // initial value of a
-
-    while (Date.now() < endTime) {
-        let elapsedTime = Date.now() - startTime; // time elapsed since start
-        a = elapsedTime / 1000; // calculate new value of a
-    }
-
-    setTimeout(function() {
-        return a;
-    }, 10);
-}
-
-function radiansToPi(radians) {
-    return radians / Math.PI;
-}
-
 function map(value, min1, max1, min2, max2) {
     const range1 = max1 - min1;
     const range2 = max2 - min2;
     const valueScaled = (value - min1) / range1;
     return min2 + (valueScaled * range2);
 }
-
-
-/* -------------------------------------------------------------------------- */
-/*                               scroll function                              */
-/* -------------------------------------------------------------------------- */
-// let scrollPercent = 0;
-// let scroll = document.getElementById('scroll')
-// document.body.onscroll = () => {
-//         scrollPercent =
-//             ((document.documentElement.scrollTop || document.body.scrollTop) /
-//                 ((document.documentElement.scrollHeight ||
-//                         document.body.scrollHeight) -
-//                     document.documentElement.clientHeight)) *
-//             100;
-//         scroll.innerHTML = "scroll progress: " + scrollPercent.toFixed(2)
-//     }
-
-//     /* ------------------------------- scroll down ------------------------------ */
-// const animationScripts = [];
-// animationScripts.push({
-//     start: 0,
-//     end: p[0],
-//     func: function() {
-//         camera.lookAt(0, 0, 0)
-//         camera.position.set(a[0], a[1], a[2])
-
-//     }
-// });
-// animationScripts.push({
-//     start: 0,
-//     end: 110,
-//     func: function() {
-//         camera.lookAt(10, 0, 0)
-//         camera.position.x += (mouseX / 10000 - camera.position.x) * .05;
-//         camera.position.y += (-mouseY / 10000 - camera.position.y) * .05;
-//     }
-// });
-
-// animationScripts.push({
-//     start: p[0],
-//     end: p[1],
-//     func: function() {
-//         camera.lookAt(0, 0, 0)
-//         camera.position.x = lerp(camera.position.x, b[0], scalePercent(p[0], p[1]));
-//         camera.position.y = lerp(camera.position.y, b[1], scalePercent(p[0], p[1]));
-//         camera.position.z = lerp(camera.position.z, b[2], scalePercent(p[0], p[1]));
-//     }
-// });
-// animationScripts.push({
-//     start: p[1],
-//     end: p[2],
-//     func: function() {
-//         camera.lookAt(0, 0, 0)
-//         camera.position.set(b[0], b[1], b[2])
-//     }
-// });
-// // scalePercent(30, 40)
-// animationScripts.push({
-//     start: p[2],
-//     end: p[3],
-//     func: function() {
-//         camera.lookAt(0, 0, 0)
-//         camera.position.x = lerp(camera.position.x, c[0], scalePercent(p[2], p[3]));
-//         camera.position.y = lerp(camera.position.y, c[1], scalePercent(p[2], p[3]));
-//         camera.position.z = lerp(camera.position.z, c[2], scalePercent(p[2], p[3]));
-//     }
-// });
-// animationScripts.push({
-//     start: p[3],
-//     end: 100,
-//     func: function() {
-//         camera.lookAt(0, 0, 0)
-//         camera.position.set(c[0], c[1], c[2])
-//     }
-// });
-// /* -------------------------------- scroll up ------------------------------- */
-// const animationScriptsup = [];
-// animationScriptsup.push({
-//     start: 0,
-//     end: 110,
-//     func: function() {
-//         camera.lookAt(0, 0, 0)
-//         camera.position.x += (mouseX / 10000 - camera.position.x) * .05;
-//         camera.position.y += (-mouseY / 10000 - camera.position.y) * .05;
-//     }
-// });
-// animationScriptsup.push({
-//     start: p[0],
-//     end: p[1],
-//     func: function() {
-//         camera.lookAt(0, 0, 0)
-//         camera.position.x = lerp(a[0], camera.position.x, scalePercent(p[0], p[1]));
-//         camera.position.y = lerp(a[1], camera.position.y, scalePercent(p[0], p[1]));
-//         camera.position.z = lerp(a[2], camera.position.z, scalePercent(p[0], p[1]));
-//     }
-// });
-
-// animationScriptsup.push({
-//     start: 0,
-//     end: 110,
-//     func: function() {
-//         camera.lookAt(0, 0, 0)
-//         camera.position.x += (mouseX / 10000 - camera.position.x) * .05;
-//         camera.position.y += (-mouseY / 10000 - camera.position.y) * .05;
-//     }
-// });
-
-// animationScriptsup.push({
-//     start: p[2],
-//     end: p[3],
-//     func: function() {
-//         camera.lookAt(0, 0, 0)
-//         camera.position.x = lerp(b[0], camera.position.x, scalePercent(p[2], p[3]));
-//         camera.position.y = lerp(b[1], camera.position.y, scalePercent(p[2], p[3]));
-//         camera.position.z = lerp(b[2], camera.position.z, scalePercent(p[2], p[3]));
-//     }
-// });
-
-
-
-
-// hideButton()
-
-// if (webapi.deviceorientationactive) {
-//     addEventListener(move)
-// } else if (webapi.exists && !webapi.deviceorientationactive) {
-//     showButton();
-// }
-
-// onButtonClick() {
-//     if (webapi.deviceorientationactive) {
-//         return;
-//     }
-//     askPermission().then(answer => {
-//         if (answer == true) {
-//             hideButton()
-//             addEventListener(move)
-//         } else {
-//             donothing()
-//         }
-//     })
-// }
-
-// move = function () {
-//     params = webapi.parameters
-//     move3d(params)
-// }
