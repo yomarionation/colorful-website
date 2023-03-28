@@ -107,22 +107,13 @@ body {
 
 #phonedirectionbtn {
     position: fixed;
-    font-family: 'VTCcolorful';
-    font-size: 3vh;
-    border-radius: 0;
-    border-width: 0.125vh;
-    height: 4.27vh;
-    width: 38.27vw;
+    width: 20.27vw;
     z-index: 10;
-    top: 79.5vh;
+    top: 74.5vh;
     left: 4.5vw;
 }
 
-.btnoff {
-    color: #ffffff;
-    background-color: #000;
-    /* display: none; */
-}
+
 
 .btnon {
     color: #000;
