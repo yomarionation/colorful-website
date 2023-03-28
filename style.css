@@ -107,9 +107,9 @@ body {
 
 #phonedirectionbtn {
     position: fixed;
-    width: 20.27vw;
+    width: 26.27vw;
     z-index: 10;
-    top: 74.5vh;
+    top: 71.5vh;
     left: 4.5vw;
 }
 
