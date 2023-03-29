@@ -8,25 +8,12 @@ import {
 
 import model from './public/1.glb?url'
 import isMobile from 'ismobilejs';
-// const userAgent = req.headers['user-agent'];
-
 
 /* -------------------------------------------------------------------------- */
 /*                                 Basic Setup                                */
 /* -------------------------------------------------------------------------- */
-// /* Storing user's device details in a variable*/
-let details = navigator.userAgent;
 
-// /* Creating a regular expression
-// containing some mobile devices keywords
-// to search it in details string*/
-let regexp = /android|iphone|kindle|ipad/i;
-
-// /* Using test() method to search regexp in details
-// it returns boolean value*/
 let isMobileDevice = isMobile(window.navigator).any;
-// console.log(isMobileDevice);
-// console.log();
 let mouseX = 0,
     mouseY = 0;
 let mouseOX = 0;
@@ -290,8 +277,8 @@ function orientationinit() {
 }
 
 function orientationmove() {
-    document.getElementById("i").style.display = "block"
-    orientationbtn.style.display = "none";
+    // document.getElementById("i").style.display = "block"
+    // orientationbtn.style.display = "none";
     window.addEventListener('deviceorientation', function(event) {
         beta = event.beta / 10 - 3;
         gamma = event.gamma / 10;
