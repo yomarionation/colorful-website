@@ -253,7 +253,7 @@ function clickrequest() {
                 } else {
                     orientationbtn.style.display = "none";
                     console.log("no3")
-                    document.getElementById("restartindication").style.display = "block"
+                    // document.getElementById("restartindication").style.display = "block"
                 }
             }).catch(console.error);
         }
@@ -269,7 +269,7 @@ function orientationinit() {
                 orientationmove()
             } else {
                 orientationbtn.style.display = "none";
-                document.getElementById("restartindication").style.display = "block"
+                // document.getElementById("restartindication").style.display = "block"
                 console.log("no2")
             }
         }).catch(console.error);
